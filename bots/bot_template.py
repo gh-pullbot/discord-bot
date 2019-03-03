@@ -9,6 +9,9 @@ from ctypes.util import find_library
 # first interval 150s (27:14)
 # when HP hits 20% on the second HP bar, interval becomes 125s
 # when HP hits 20% on the third HP bar, interval becomes 100s
+# Additional feature:
+# - Add a input of current clock time for soul split
+#    - This is especially helpful after a phase change
 
 # client == bot
 client = discord.Client()
@@ -44,7 +47,17 @@ async def timer(vc, interval):
         # 15s    
         await asyncio.sleep(15)
         bot_speak(vc, 'a15seconds.mp3')
+
+        # 5s
+        await asyncio.sleep(10)
+        bot_speak(vc, 'a5seconds.mp3')
         
+        if phase == 1:
+            await timer(vc, 150)
+        elif phase == 2:
+            await timer(vc, 125)
+        elif phase == 3:
+            await timer(vc, 100)
         # await asyncio.sleep(1)
 
 # responding to an external user message
@@ -86,32 +99,30 @@ async def on_message(message):
 
     # this should only be used at 2.2 bars left
     if message.content.startswith('!2'):
-        phase = 2
         if client.is_voice_connected(server):
             # bot's currently voice channel
-            vc = client.user.voice.voice_channel
+            phase = 2
+            vc = find_bot_voice_client()
+            bot_speak(vc, '125.mp3') # say interval is now 125s
             msg = 'split interval now 125 seconds'
         else:
             # bot is not in a VC
             msg = 'bot is not currently in a voice chat'
 
-        await timer(vc, 125)
-        bot_speak(vc, '125.mp3') # say interval is now 125s
         await client.send_message(message.channel, msg)
 
     # this should only be used at 1.2 bars left
     if message.content.startswith('!3'):
-        phase = 3
         if client.is_voice_connected(server):
             # bot's currently voice channel
-            vc = client.user.voice.voice_channel
+            phase = 3
+            vc = find_bot_voice_client()
+            bot_speak(vc, '100.mp3') # say interval is now 125s
             msg = 'split interval now 100 seconds'
         else:
             # bot is not in a VC
             msg = 'bot is not currently in a voice chat'
 
-        await timer(vc, 100)
-        bot_speak(vc, '100.mp3') # say interval is now 100s
         await client.send_message(message.channel, msg)
 
 @client.event
@@ -121,6 +132,11 @@ async def on_ready():
     print(client.user.id)
     print('------')
 
+def find_bot_voice_client():
+    vcs = list(client.voice_clients)
+    vc = vcs[0] # could index more robustly when bot is used by mult. ppl
+    return vc
+    
 def find_user_vc():
     voice_channels = client.voice_clients
     print("voice channels: ", voice_channels)
@@ -133,5 +149,4 @@ def bot_speak(vc, mp3_name):
     player = vc.create_ffmpeg_player(mp3_name, after=lambda: print('done'))
     player.start()
     
-
 client.run(TOKEN)
