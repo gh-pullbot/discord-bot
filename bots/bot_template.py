@@ -61,8 +61,6 @@ def find_user_vc():
 def timer():
     now = time.localtime(time.time())
     return now[5]
-
-
     
 token_file = open('secret_key.txt', 'r')
 TOKEN = token_file.read() # make a file called secret_key.txt and replace with key
