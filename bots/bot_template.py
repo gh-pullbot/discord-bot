@@ -3,6 +3,8 @@ import discord
 import time
 import asyncio
 from ctypes.util import find_library
+import pyttsx3
+import os
 
 # Inspired by ThiefGMS and his insight/mp3 files into the Verus Hilla fight
 # 16s from start to hourglass timer (29:44)
@@ -28,15 +30,21 @@ me_user.id = 75954529383743488
 opuslib = find_library('opus')
 discord.opus.load_opus(opuslib)
 
+# free TTS engine for Python e-Speak (on Linux) for "soul split at xx:xx"
+engine = pyttsx3.init()
+engine.setProperty('rate', 100)
+engine.setProperty('volume', 1)
+
 # keep track of 15s, 30s, and 60s
 phase = 0
 started = False
 
-async def timer(vc, interval):
+async def timer(vc, interval, boss_time):
     while True:
+        # boss_time starts at 1784 seconds, or 29:44
         # text to speech
         # 60s
-        print("wait for 90 seconds")
+        print("starting timer for ", interval, " seconds")
         await asyncio.sleep(interval - 60)
         bot_speak(vc, 'a60seconds.mp3')
         
@@ -47,18 +55,32 @@ async def timer(vc, interval):
         # 15s    
         await asyncio.sleep(15)
         bot_speak(vc, 'a15seconds.mp3')
-
+        
         # 5s
         await asyncio.sleep(10)
         bot_speak(vc, 'a5seconds.mp3')
         
-        if phase == 1:
-            await timer(vc, 150)
-        elif phase == 2:
-            await timer(vc, 125)
+        # 0s
+        await asyncio.sleep(5)
+        
+        # update internal representation of boss clock
+        boss_time -= interval
+        mins_and_secs = seconds_to_minutes_and_seconds(boss_time)
+        
+        # generate wav file to say "soul split at xx:xx"
+        # unfortunately, this uses a really creepy low voice, but I really can't find
+        # anything better for free. Google TTS is amazing, but requires real $$$
+        soul_split_at_xx_xx = '\"soul. split. at. ' + mins_and_secs + '"'
+        generate_speech_wav(soul_split_at_xx_xx)
+        bot_speak(vc, 'soulsplit.wav')
+        
+        # if phase changed, start timer again with less time
+        if phase == 2:
+            await timer(vc, 125, boss_time)
+            break
         elif phase == 3:
-            await timer(vc, 100)
-        # await asyncio.sleep(1)
+            await timer(vc, 100, boss_time)
+            break
 
 # responding to an external user message
 @client.event
@@ -94,7 +116,7 @@ async def on_message(message):
         phase = 1
         started = True
         await client.send_message(message.channel, msg)
-        await timer(vc, 150)
+        await timer(vc, 150, 1634) # start timer at 29:44 in boss
         print ("main is done")
 
     # this should only be used at 2.2 bars left
@@ -137,14 +159,20 @@ def find_bot_voice_client():
     vc = vcs[0] # could index more robustly when bot is used by mult. ppl
     return vc
     
-def find_user_vc():
-    voice_channels = client.voice_clients
-    print("voice channels: ", voice_channels)
-    for vc in voice_channels:
-        if vc.user == me_user:
-            # found vc of Sam, join pls
-            return vc
+def seconds_to_minutes_and_seconds(seconds):
+    mins = int(seconds / 60)
+    secs = seconds % 60
+    mins_and_secs = str(mins) + " minutes " + str(secs) + " seconds"
+    print(mins_and_secs)
+    return mins_and_secs
 
+def generate_speech_wav(text):
+    espeak_command = 'espeak -m ' + text
+    espeak_command += ' -v mb-en1 --stdout > soulsplit.wav'
+    print(espeak_command)
+    os.system(espeak_command) # generates soulsplit.wav
+    print("TTS generation of soulsplit.wav is successful")
+    
 def bot_speak(vc, mp3_name):
     player = vc.create_ffmpeg_player(mp3_name, after=lambda: print('done'))
     player.start()
