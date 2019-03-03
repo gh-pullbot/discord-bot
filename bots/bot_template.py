@@ -1,6 +1,8 @@
 # Work with Python 3.6
 import discord
 import time
+import asyncio
+from ctypes.util import find_library
 
 # 16s from start to hourglass timer (29:44)
 # first interval 150s (27:14)
@@ -13,6 +15,12 @@ client = discord.Client()
 # responding to an external user message
 @client.event
 async def on_message(message):
+    # message sender's parameters
+    author = message.author
+    channel = message.channel
+    server = message.server
+    call = author.voice.voice_channel # author's current voice channel
+    print(type(call))
     # we do not want the bot to reply to itself
     if message.author == client.user:
         return
@@ -23,13 +31,14 @@ async def on_message(message):
 
     if message.content.startswith('!start'):
         # joins the vc, speaks to us
-        msg = '/tts hilla timer started, 30 seconds between messages'
-#        vc = find_user_vc()
-#        voice_client = client.join_voice_channel(vc)
-#        player = vc.create_ffmpeg_player('start.mp3', after=lambda: print('done'))
-#        player.start()
+        print("started")
+        msg = 'hilla timer started, 30 seconds between messages'
+        vc = await client.join_voice_channel(call)
+        player = vc.create_ffmpeg_player('start.mp3', after=lambda: print('done'))
+        player.start()
         await asyncio.sleep(16) # wait for 16s after entry, as the announcement is made
         phase = 1
+        started = True
         await client.send_message(message.channel, msg)
 
     # this should only be used at 2.2 bars left
@@ -52,7 +61,9 @@ async def on_ready():
     print('------')
 
 def find_user_vc():
+    print(client)
     voice_channels = client.voice_clients
+    print("voice channels: ", voice_channels)
     for vc in voice_channels:
         if vc.user == me_user:
             # found vc of Sam, join pls
@@ -73,7 +84,8 @@ me_user.name = "Sam (CodeNox)#6829"
 me_user.id = 75954529383743488
 
 # open and load OPUS library for voice chat support and transcoding
-#discord.opus.load_opus('libopus.so')
+opuslib = find_library('opus')
+discord.opus.load_opus(opuslib)
 
 client.run(TOKEN)
 
