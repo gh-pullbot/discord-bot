@@ -24,13 +24,13 @@ async def on_message(message):
     if message.content.startswith('!start'):
         # joins the vc, speaks to us
         msg = '/tts hilla timer started, 30 seconds between messages'
-        vc = find_user_vc()
-        voice_client = client.join_voice_channel(vc)
-        player = vc.create_ffmpeg_player('start.mp3', after=lambda: print('done'))
-        player.start()
+#        vc = find_user_vc()
+#        voice_client = client.join_voice_channel(vc)
+#        player = vc.create_ffmpeg_player('start.mp3', after=lambda: print('done'))
+#        player.start()
         await asyncio.sleep(16) # wait for 16s after entry, as the announcement is made
         phase = 1
-#        await client.send_message(message.channel, msg)
+        await client.send_message(message.channel, msg)
 
     # this should only be used at 2.2 bars left
     if message.content.startswith('!2'):
@@ -75,7 +75,7 @@ me_user.name = "Sam (CodeNox)#6829"
 me_user.id = 75954529383743488
 
 # open and load OPUS library for voice chat support and transcoding
-discord.opus.load_opus('opus')
+#discord.opus.load_opus('libopus.so')
 
 client.run(TOKEN)
 
