@@ -21,13 +21,8 @@ client = discord.Client()
 token_file = open('secret_key.txt', 'r')
 TOKEN = token_file.read() # make a file called secret_key.txt and replace with key
 
-# user == guy who calls bot, hard coded to me
-me_user = discord.User()
-me_user.name = "Sam (CodeNox)#6829"
-me_user.id = 75954529383743488
-
 # open and load OPUS library for voice chat support and transcoding
-opuslib = find_library('opus')
+opuslib = find_library('opus') # Linux-based function
 discord.opus.load_opus(opuslib)
 
 # free TTS engine for Python e-Speak (on Linux) for "soul split at xx:xx"
@@ -39,9 +34,22 @@ engine.setProperty('volume', 1)
 phase = 0
 started = False
 
+@client.event
+async def on_ready():
+    '''
+    Is run when program is run, to connect bot with Discord server specified in Developer's Portal API
+    Bot needs to be authorized properly and initialized
+    '''
+    print('Logged in as')
+    print(client.user.name)
+    print(client.user.id)
+    print('------')
+
 async def timer(vc, interval, boss_time):
     while True:
-        # boss_time starts at 1784 seconds, or 29:44
+        # boss_time first starts at 1784 seconds, or 29:44
+        print('timer has started at boss time: ', seconds_to_minutes_and_seconds(boss_time))
+        
         # text to speech
         # 60s
         print("starting timer for ", interval, " seconds")
@@ -77,7 +85,7 @@ async def timer(vc, interval, boss_time):
         # if phase changed, start timer again with less time
         if phase == 2:
             await timer(vc, 125, boss_time)
-            break
+            break # so previous thread of timer stops and returns
         elif phase == 3:
             await timer(vc, 100, boss_time)
             break
@@ -100,24 +108,33 @@ async def on_message(message):
         await client.send_message(message.channel, msg)
 
     if message.content.startswith('!start'):
-        # joins the vc, speaks to us
-        print("started")
-        msg = 'hilla timer started, 30 seconds between messages, joined vc'
+        # Joins the voice chat of the person who used the command
         if not client.is_voice_connected(server):
-            # if the bot is not already in a channel, join one
-            vc = await client.join_voice_channel(call)
+            # if the bot is not already in a channel
+            if call != None:
+                # if author is in a VC, join and send ACK
+                vc = await client.join_voice_channel(call)
+                msg = 'Verus Hilla timer started. Bot has joined VC'
+                await client.send_message(message.channel, msg)
 
-        # play the start.mp3 file, which says "hilla fight starting, good luck"
-        bot_speak(vc, 'start.mp3')
+                # play the start.mp3 file, which says "hilla fight starting, good luck"
+                bot_speak(vc, 'start.mp3')
+                
+                # wait for 16s after entry to skip opening cutscene, as the announcement is being made
+                await asyncio.sleep(16)
+                
+                phase = 1
+                started = True
+                await timer(vc, 150, 1634) # start timer at 29:44 in boss
+            else:
+                # if author is not in VC, don't join and ask author to please join
+                msg = 'Please join a voice channel first and re-use the command for bot to join.'
+                await client.send_message(message.channel, msg)
+        else:
+            msg = 'Verus Hilla Bot is already in a voice channel.'
+            await client.send_message(message.channel, msg)
 
-        # wait for 16s after entry, as the announcement is made
-        await asyncio.sleep(16)
-
-        phase = 1
-        started = True
-        await client.send_message(message.channel, msg)
-        await timer(vc, 150, 1634) # start timer at 29:44 in boss
-        print ("main is done")
+        print('!start called by ', author, ' has finished executing')
 
     # this should only be used at 2.2 bars left
     if message.content.startswith('!2'):
@@ -126,12 +143,13 @@ async def on_message(message):
             phase = 2
             vc = find_bot_voice_client()
             bot_speak(vc, '125.mp3') # say interval is now 125s
-            msg = 'split interval now 125 seconds'
+            msg = 'Split interval now 125 seconds. Will start after next soul split.'
         else:
             # bot is not in a VC
-            msg = 'bot is not currently in a voice chat'
+            msg = 'Bot is not currently in a voice chat'
 
         await client.send_message(message.channel, msg)
+        print('!2 called by ', author, ' has finished executing')
 
     # this should only be used at 1.2 bars left
     if message.content.startswith('!3'):
@@ -140,19 +158,13 @@ async def on_message(message):
             phase = 3
             vc = find_bot_voice_client()
             bot_speak(vc, '100.mp3') # say interval is now 125s
-            msg = 'split interval now 100 seconds'
+            msg = 'Split interval now 100 seconds. Will start after next soul split.'
         else:
             # bot is not in a VC
-            msg = 'bot is not currently in a voice chat'
+            msg = 'Bot is not currently in a voice chat'
 
         await client.send_message(message.channel, msg)
-
-@client.event
-async def on_ready():
-    print('Logged in as')
-    print(client.user.name)
-    print(client.user.id)
-    print('------')
+        print('!3 called by ', author, ' has finished executing')
 
 def find_bot_voice_client():
     vcs = list(client.voice_clients)
@@ -163,7 +175,6 @@ def seconds_to_minutes_and_seconds(seconds):
     mins = int(seconds / 60)
     secs = seconds % 60
     mins_and_secs = str(mins) + " minutes " + str(secs) + " seconds"
-    print(mins_and_secs)
     return mins_and_secs
 
 def generate_speech_wav(text):
