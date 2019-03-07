@@ -138,7 +138,7 @@ async def on_message(message):
 
     # this should only be used at 2.2 bars left
     if message.content.startswith('!2'):
-        if client.is_voice_connected(server):
+        if client.is_voice_connected(server) and phase != 2:
             # bot's currently voice channel
             phase = 2
             vc = find_bot_voice_client()
@@ -153,7 +153,7 @@ async def on_message(message):
 
     # this should only be used at 1.2 bars left
     if message.content.startswith('!3'):
-        if client.is_voice_connected(server):
+        if client.is_voice_connected(server) and phase != 3:
             # bot's currently voice channel
             phase = 3
             vc = find_bot_voice_client()
@@ -185,7 +185,7 @@ def generate_speech_wav(text):
     print("TTS generation of soulsplit.wav is successful")
     
 def bot_speak(vc, mp3_name):
-    player = vc.create_ffmpeg_player(mp3_name, after=lambda: print('done'))
+    player = vc.create_ffmpeg_player(mp3_name, after=lambda: print('speech is done'))
     player.start()
     
 client.run(TOKEN)
