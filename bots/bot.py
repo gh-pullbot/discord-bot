@@ -140,7 +140,7 @@ async def on_message(message):
 
     # this should only be used at 2.2 bars left
     if message.content.startswith('!2'):
-        if client.is_voice_connected(server) and phase != 2:
+        if client.is_voice_connected(server):
             # bot's currently voice channel
             phase = 2
             vc = find_bot_voice_client()
@@ -155,7 +155,7 @@ async def on_message(message):
 
     # this should only be used at 1.2 bars left
     if message.content.startswith('!3'):
-        if client.is_voice_connected(server) and phase != 3:
+        if client.is_voice_connected(server):
             # bot's currently voice channel
             phase = 3
             vc = find_bot_voice_client()
