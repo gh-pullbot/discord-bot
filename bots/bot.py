@@ -1,6 +1,7 @@
 # Work with Python 3.6
 import discord
 import time
+import datetime
 import asyncio
 from ctypes.util import find_library
 import pyttsx3
@@ -20,6 +21,7 @@ client = discord.Client()
 
 token_file = open('secret_key.txt', 'r')
 TOKEN = token_file.read() # make a file called secret_key.txt and replace with key
+TOKEN = TOKEN.rstrip()
 
 # open and load OPUS library for voice chat support and transcoding
 opuslib = find_library('opus') # Linux-based function
@@ -40,19 +42,19 @@ async def on_ready():
     Is run when program is run, to connect bot with Discord server specified in Developer's Portal API
     Bot needs to be authorized properly and initialized
     '''
-    print('Logged in as')
-    print(client.user.name)
-    print(client.user.id)
-    print('------')
+    log('Logged in as')
+    log(client.user.name)
+    log(client.user.id)
+    log('------')
 
 async def timer(vc, interval, boss_time):
     while True:
         # boss_time first starts at 1784 seconds, or 29:44
-        print('timer has started at boss time: ', seconds_to_minutes_and_seconds(boss_time))
+        log('timer has started at boss time: ' + str(seconds_to_minutes_and_seconds(boss_time)))
         
         # text to speech
         # 60s
-        print("starting timer for ", interval, " seconds")
+        log("starting timer for " + str(interval) + " seconds")
         await asyncio.sleep(interval - 60)
         bot_speak(vc, 'a60seconds.mp3')
         
@@ -134,7 +136,7 @@ async def on_message(message):
             msg = 'Verus Hilla Bot is already in a voice channel.'
             await client.send_message(message.channel, msg)
 
-        print('!start called by ', author, ' has finished executing')
+        log('!start called by ' + str(author) + ' has finished executing')
 
     # this should only be used at 2.2 bars left
     if message.content.startswith('!2'):
@@ -149,7 +151,7 @@ async def on_message(message):
             msg = 'Bot is not currently in a voice chat'
 
         await client.send_message(message.channel, msg)
-        print('!2 called by ', author, ' has finished executing')
+        log('!2 called by ' + str(author) + ' has finished executing')
 
     # this should only be used at 1.2 bars left
     if message.content.startswith('!3'):
@@ -164,7 +166,7 @@ async def on_message(message):
             msg = 'Bot is not currently in a voice chat'
 
         await client.send_message(message.channel, msg)
-        print('!3 called by ', author, ' has finished executing')
+        log('!3 called by ' + str(author) + ' has finished executing')
 
     # disconnect from server
     if message.content.startswith('!stop'):
@@ -188,12 +190,17 @@ def seconds_to_minutes_and_seconds(seconds):
 def generate_speech_wav(text):
     espeak_command = 'espeak -m ' + text
     espeak_command += ' -v mb-en1 --stdout > soulsplit.wav'
-    print(espeak_command)
+    log(espeak_command)
     os.system(espeak_command) # generates soulsplit.wav
-    print("TTS generation of soulsplit.wav is successful")
+    log("TTS generation of soulsplit.wav is successful")
     
 def bot_speak(vc, mp3_name):
-    player = vc.create_ffmpeg_player(mp3_name, after=lambda: print('speech is done'))
+    player = vc.create_ffmpeg_player(mp3_name, after=lambda: log('speech is done'))
     player.start()
+    
+
+def log(line):
+    dateStr = datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+    print('[' + dateStr + '] ' + line)
     
 client.run(TOKEN)
