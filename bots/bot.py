@@ -166,6 +166,14 @@ async def on_message(message):
         await client.send_message(message.channel, msg)
         print('!3 called by ', author, ' has finished executing')
 
+    # disconnect from server
+    if message.content.startswith('!stop'):
+        for x in client.voice_clients:
+            if x.server == server:
+                await x.disconnect()
+                msg = "Disconnected from " + str(x.server) + " server"
+                await client.send_message(message.channel, msg)
+
 def find_bot_voice_client():
     vcs = list(client.voice_clients)
     vc = vcs[0] # could index more robustly when bot is used by mult. ppl
