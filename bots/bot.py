@@ -12,7 +12,7 @@ import os
 # first interval 150s (27:14)
 # when HP hits 20% on the second HP bar, interval becomes 125s
 # when HP hits 20% on the third HP bar, interval becomes 100s
-# Additional feature:
+# Additional feature to be added:
 # - Add a input of current clock time for soul split
 #    - This is especially helpful after a phase change
 
@@ -95,6 +95,7 @@ async def timer(vc, interval, boss_time):
 # responding to an external user message
 @client.event
 async def on_message(message):
+    global phase
     # message sender's parameters
     author = message.author
     channel = message.channel
@@ -124,7 +125,7 @@ async def on_message(message):
                 
                 # wait for 16s after entry to skip opening cutscene, as the announcement is being made
                 await asyncio.sleep(16)
-                
+
                 phase = 1
                 started = True
                 await timer(vc, 150, 1634) # start timer at 29:44 in boss
@@ -175,6 +176,7 @@ async def on_message(message):
                 await x.disconnect()
                 msg = "Disconnected from " + str(x.server) + " server"
                 await client.send_message(message.channel, msg)
+                break
 
 def find_bot_voice_client():
     vcs = list(client.voice_clients)
@@ -197,7 +199,6 @@ def generate_speech_wav(text):
 def bot_speak(vc, mp3_name):
     player = vc.create_ffmpeg_player(mp3_name, after=lambda: log('speech is done'))
     player.start()
-    
 
 def log(line):
     dateStr = datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S')
