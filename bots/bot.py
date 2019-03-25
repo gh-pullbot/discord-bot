@@ -120,10 +120,18 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content.startswith('!hello'):
-        msg = 'Hello {0.author.mention}'.format(message)
-        await client.send_message(message.channel, msg)
+#    if message.content.startswith('!hello'):
+#        msg = 'Hello {0.author.mention}'.format(message)
+#        await client.send_message(message.channel, msg)
 
+    if message.content.startswith('!help'):
+        msg = 'Please do not use a command while the bot is speaking. It will crash.'
+        msg += '\nCommands include:'
+        msg += '\n     !2 for phase 2 (use after 1.75 HP bars have depleted)'
+        msg += '\n     !3 for phase 3 (use after 2.75 HP bars have depleted)'
+        msg += '\n     !stop to disconnect the bot.'
+        await client.send_message(message.channel, msg)
+        
     if message.content.startswith('!start'):
         # Joins the voice chat of the person who used the command
         if not client.is_voice_connected(server):
@@ -132,8 +140,8 @@ async def on_message(message):
                 # if author is in a VC, join and send ACK
                 vc = await client.join_voice_channel(call)
                 msg = 'Verus Hilla timer started. Bot has joined VC'
-                msg += 'Please do not use a command while the bot is speaking. It will crash.'
-                msg += 'Commands include:'
+                msg += '\nPlease do not use a command while the bot is speaking. It will crash.'
+                msg += '\nCommands include:'
                 msg += '\n     !2 for phase 2 (use after 1.75 HP bars have depleted)'
                 msg += '\n     !3 for phase 3 (use after 2.75 HP bars have depleted)'
                 msg += '\n     !stop to disconnect the bot.'
