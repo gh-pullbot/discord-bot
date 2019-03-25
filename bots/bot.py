@@ -198,11 +198,9 @@ def generate_speech_wav(text):
     
 def bot_speak(vc, mp3_name):
     player = vc.create_ffmpeg_player(mp3_name, after=lambda: log('speech is done'))
-    if player.is_playing():
-        player.stop()
-        
     player.start()
-        
+    if player.error != None:
+        player.stop()
 
 def log(line):
     dateStr = datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S')
