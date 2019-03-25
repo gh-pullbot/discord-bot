@@ -132,6 +132,11 @@ async def on_message(message):
                 # if author is in a VC, join and send ACK
                 vc = await client.join_voice_channel(call)
                 msg = 'Verus Hilla timer started. Bot has joined VC'
+                msg += 'Please do not use a command while the bot is speaking. It will crash.'
+                msg += 'Commands include:'
+                msg += '\n     !2 for phase 2 (use after 1.75 HP bars have depleted)'
+                msg += '\n     !3 for phase 3 (use after 2.75 HP bars have depleted)'
+                msg += '\n     !stop to disconnect the bot.'
                 await client.send_message(message.channel, msg)
 
                 # play the start.mp3 file, which says "hilla fight starting, good luck"
