@@ -82,7 +82,7 @@ async def timer(vc, interval, boss_time):
         # anything better for free. Google TTS is amazing, but requires real $$$
         soul_split_at_xx_xx = '\"soul. split. at. ' + mins_and_secs + '"'
         generate_speech_wav(soul_split_at_xx_xx)
-        await bot_speak(vc, 'soulsplit.wav')
+        bot_speak(vc, 'soulsplit.wav')
         
         # if phase changed, start timer again with less time
         if phase == 2:
@@ -121,7 +121,7 @@ async def on_message(message):
                 await client.send_message(message.channel, msg)
 
                 # play the start.mp3 file, which says "hilla fight starting, good luck"
-                await bot_speak(vc, 'start.mp3')
+                bot_speak(vc, 'start.mp3')
                 
                 # wait for 16s after entry to skip opening cutscene, as the announcement is being made
                 await asyncio.sleep(16)
@@ -145,7 +145,7 @@ async def on_message(message):
             # bot's currently voice channel
             phase = 2
             vc = find_bot_voice_client()
-            await bot_speak(vc, '125.mp3') # say interval is now 125s
+            bot_speak(vc, '125.mp3') # say interval is now 125s
             msg = 'Split interval now 125 seconds. Will start after next soul split.'
         else:
             # bot is not in a VC
@@ -160,7 +160,7 @@ async def on_message(message):
             # bot's currently voice channel
             phase = 3
             vc = find_bot_voice_client()
-            await bot_speak(vc, '100.mp3') # say interval is now 125s
+            bot_speak(vc, '100.mp3') # say interval is now 125s
             msg = 'Split interval now 100 seconds. Will start after next soul split.'
         else:
             # bot is not in a VC
@@ -196,9 +196,13 @@ def generate_speech_wav(text):
     os.system(espeak_command) # generates soulsplit.wav
     log("TTS generation of soulsplit.wav is successful")
     
-async def bot_speak(vc, mp3_name):
+def bot_speak(vc, mp3_name):
     player = vc.create_ffmpeg_player(mp3_name, after=lambda: log('speech is done'))
-    await player.start()
+    if player.is_playing():
+        player.stop()
+        
+    player.start()
+        
 
 def log(line):
     dateStr = datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S')
