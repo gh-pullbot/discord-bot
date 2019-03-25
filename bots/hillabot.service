@@ -1,0 +1,13 @@
+[Unit]
+Description=CodeNox HillaBot
+
+[Service]
+User=root
+RemainAfterExit=no
+Restart=on-failure
+RestartSec=5s
+WorkingDirectory=/opt/projects/hillabot/current
+ExecStart=/usr/bin/python3 /opt/projects/hillabot/current/bot.py
+
+[Install]
+WantedBy=multi-user.target
