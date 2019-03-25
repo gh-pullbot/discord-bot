@@ -16,6 +16,17 @@ import os
 # - Add a input of current clock time for soul split
 #    - This is especially helpful after a phase change
 
+'''
+Current bugs: 
+If a command (that calls bot_speak) is used while the bot is currently talking, the bot will crash with segfault.
+This is due to libopus, most likely happening in bot_speak() with the ffmpeg player.
+
+The create_ffmpeg_player is in a new thread every time it is called to play an mp3 track, so I cannot figure out
+how to make the previous thread's ffmpeg player stop if a new audio request is started.
+
+In other words, if the bot is already speaking and is asked to speak something else, it will crash.
+'''
+
 # client == bot
 client = discord.Client()
 
@@ -199,8 +210,6 @@ def generate_speech_wav(text):
 def bot_speak(vc, mp3_name):
     player = vc.create_ffmpeg_player(mp3_name, after=lambda: log('speech is done'))
     player.start()
-    if player.error != None:
-        player.stop()
 
 def log(line):
     dateStr = datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S')
