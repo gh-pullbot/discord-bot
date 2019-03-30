@@ -1,6 +1,37 @@
 # discord-bot
 Discord Bot for Time Keeping in MapleStory
 
+This bot's timer is tuned for the Verus/True Hilla boss fight and can be deployed on up to as many servers as Discord allows per Application in the [Discord Developer Portal](https://discordapp.com/developers/applications/).
+
+Inspired by ThiefGMS and his insight/mp3 files into the Verus Hilla fight
+Special Thanks to MapleStory.gg and catboy on Discord for their contributions and hosting!
+
+Boss Timer Mechanics:
+     16s from start to hourglass timer (29:44)
+     First interval 150s (27:14, etc.)
+     When HP hits 25% on the second HP bar, interval becomes 125s  (requires !2 input from the player)
+     When HP hits 20% on the third HP bar, interval becomes 100s   (requires !3 input from the player)
+
+Possible Future Features:
+ - Allow input of current clock time for soul split
+    - This is especially helpful after a phase change
+
+NOTE:
+This bot may not always be 100% accurate to the real fight due to unresolvable latency issues with both the Nexon and Discord servers. There may be a variance of 0-5s from actual game.
+
+# Usage
+NOTE: Please do not use a command while the bot is speaking. It will crash due to OPUS limitations with Discord.
+
+Commands include:
+
+!start to start timer and allow bot to enter user's voice channel
+
+!2 for phase 2 (use after 1.75 HP bars have depleted)
+
+!3 for phase 3 (use after 2.75 HP bars have depleted)
+
+!stop to disconnect the bot.
+
 # Installation / Deployment
 NOTE: [Unfortunately, Discord Voice Chat does not work with free web servers like Heroku](https://stackoverflow.com/questions/53074580/discord-py-opus-heroku-issues)
 
@@ -72,21 +103,20 @@ https://discordapp.com/api/oauth2/authorize?client_id=CID&permissions=36707584&s
 
 NOTE: From what I understand, the bot needs to be properly approved via the OAuth2 link BEFORE running on the server. I am not sure about this. 
 
-# Usage
-NOTE: Please do not use a command while the bot is speaking. It will crash due to OPUS limitations with Discord.
-
-Commands include:
-
-!start to start timer and allow bot to enter user's voice channel
-
-!2 for phase 2 (use after 1.75 HP bars have depleted)
-
-!3 for phase 3 (use after 2.75 HP bars have depleted)
-
-!stop to disconnect the bot.
-
 # Known Bugs
-## LibOpus Crash
+Multiple initial starting messages may appear if !start is used after !stop in under 16 seconds. This is due to asyncio.sleep(16) in !start. This is not a critical bug and does not affect the performance of the timer. 
+
+# To Do
+#####Resolved 3/30/19:
+**Concurrency Application and Scalability Limitations**
+Find ways to lessen the number of "Applications" under Discord Dev Portal and use fewer number of keys. Current implementation is one application/key per server, and the OAuth2 permission toggling is unclear.
+
+Possible research directions on how to further scale bot: Pink Bean, NightBot, MEE6, Carl-bot
+
+https://discordapp.com/developers/docs/topics/oauth2#bots
+
+####Resolved 3/30/19:
+**LibOpus Crash**
 Using a command, which triggers another OPUS MP3 playback, when bot is already speaking will crash the bot
 
 This is due to libopus, most likely happening in bot_speak() with the ffmpeg player.
@@ -97,10 +127,3 @@ how to make the previous thread's ffmpeg player stop if a new audio request is s
 In other words, if the bot is already speaking and is asked to speak something else, it will crash.
 
 ["Creates a stream player for ffmpeg that launches in a separate thread to play audio."](https://discordpy.readthedocs.io/en/latest/api.html#discord.VoiceClient.create_ffmpeg_player)
-
-# To Do
-Find ways to lessen the number of "Applications" under Discord Dev Portal and use fewer number of keys. Current implementation is one application/key per server, and the OAuth2 permission toggling is unclear.
-
-Possible research directions on how to further scale bot: Pink Bean, NightBot, MEE6, Carl-bot
-
-https://discordapp.com/developers/docs/topics/oauth2#bots
