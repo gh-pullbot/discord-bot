@@ -2,7 +2,7 @@
 Discord Bot for Time Keeping in MapleStory
 
 # Installation
-### Currently experimenting with Zeit Now deployment
+### Currently experimenting with Heroku deployment
 Install all necessary and relevant packages on Linux server (entire list TBD). 
 Currently, the only tested platform is Ubuntu 18.04. Other Linux distributions may work as well.
 
