@@ -1,0 +1,7 @@
+{
+    "version": 2,
+    "name": "HillaBot",
+    "builds": [
+        { "src": "*.py", "use": "@now/python" }
+    ]
+}
