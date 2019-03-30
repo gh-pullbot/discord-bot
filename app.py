@@ -68,26 +68,27 @@ async def on_ready():
 
 async def timer(vc, interval, boss_time):
     global phases
+    print(phases)
     while True:
         # boss_time first starts at 1784 seconds, or 29:44
         log('timer has started at boss time: ' + str(seconds_to_minutes_and_seconds(boss_time)))
         
         # text to speech
         # 60s
-        log('Starting {} timer on {} server.'.format(interval, vc.server.id))
-        await asyncio.sleep(interval - 60)
+        log('Starting {}s timer on the {} channel in {} server.'.format(interval, vc.channel, vc.server))
+        await asyncio.sleep(5)
         bot_speak(vc, 'a60seconds.mp3')
         
         # 30s
-        await asyncio.sleep(30)
+        await asyncio.sleep(5)
         bot_speak(vc, 'a30seconds.mp3')
         
         # 15s    
-        await asyncio.sleep(15)
+        await asyncio.sleep(5)
         bot_speak(vc, 'a15seconds.mp3')
         
         # 5s
-        await asyncio.sleep(10)
+        await asyncio.sleep(5)
         bot_speak(vc, 'a5seconds.mp3')
         
         # 0s
@@ -131,8 +132,8 @@ async def on_message(message):
 #        await client.send_message(message.channel, msg)
 
     if message.content.startswith('!help'):
-        msg = 'Please do not use a command while the bot is speaking. It will crash.'
         msg += '\nCommands include:'
+        msg += '\n     !start to make bot join voice chat (use upon entering)'
         msg += '\n     !2 for phase 2 (use after 1.75 HP bars have depleted)'
         msg += '\n     !3 for phase 3 (use after 2.75 HP bars have depleted)'
         msg += '\n     !stop to disconnect the bot.'
@@ -145,13 +146,9 @@ async def on_message(message):
             if call != None:
                 # if author is in a VC, join and send ACK
                 vc = await client.join_voice_channel(call)
-                msg = 'Verus Hilla timer started. Bot has joined VC'
-#                msg += '\nPlease do not use a command while the bot is speaking. It will crash.'
-                msg += '\nCommands include:'
-                msg += '\n     !2 for phase 2 (use after 1.75 HP bars have depleted)'
-                msg += '\n     !3 for phase 3 (use after 2.75 HP bars have depleted)'
-                msg += '\n     !stop to disconnect the bot.'
+                msg = 'Verus Hilla timer has started in the {} channel in the {} server'.format(vc.channel, vc.server)
                 await client.send_message(message.channel, msg)
+                phases[vc.server.id] = 1
 
                 # play the start.mp3 file, which says "hilla fight starting, good luck"
                 bot_speak(vc, 'start.mp3')
@@ -160,9 +157,8 @@ async def on_message(message):
                 await asyncio.sleep(16)
                 msg = 'Fight has started. Starting first hourglass timer for 150s.'
                 await client.send_message(message.channel, msg)
-                
-                phases[vc.server.id] = 1
-                await timer(vc, 150, 1634) # start timer at 29:44 in boss
+
+                await timer(vc, 3, 1634) # start timer at 29:44 in boss
             else:
                 # if author is not in VC, don't join and ask author to please join
                 msg = 'Please join a voice channel first and re-use the command for bot to join.'
@@ -207,7 +203,7 @@ async def on_message(message):
     if message.content.startswith('!stop'):
         vc = find_bot_voice_client(server.id)
         await vc.disconnect()
-        msg = 'Disconnected from {} server'.format(vc.server)
+        msg = 'Disconnected from the {} channel in the {} server'.format(vc.channel, vc.server)
         await client.send_message(message.channel, msg)
 
 def find_bot_voice_client(server_id):
@@ -252,11 +248,11 @@ def bot_speak(vc, mp3_name):
         return
 
     if vc.server.id in ffmpeg_players:
-        log('stopped {}'.format(vc.server.id))
+        log('stopped {}'.format(vc.server))
         ffmpeg_players[vc.server.id].stop()
         ffmpeg_players.pop(vc.server.id, None)
 
-    log('playing {} in {}'.format(mp3_name, vc.server.id))
+    log('playing {} in {}'.format(mp3_name, vc.server))
     ffmpeg_players[vc.server.id] = vc.create_ffmpeg_player(mp3_name, after=lambda: log('speech is done'))
     ffmpeg_players[vc.server.id].start()
     
