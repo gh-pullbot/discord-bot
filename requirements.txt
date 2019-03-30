@@ -1,4 +1,4 @@
-discord.py
+discord
 django
 gunicorn
 pyttsx3
