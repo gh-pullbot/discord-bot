@@ -67,9 +67,13 @@ You should see a message [like this](http://prntscr.com/n4yrzt)
 NOTE: Please do not use a command while the bot is speaking. It will crash due to OPUS limitations with Discord.
 
 Commands include:
+
 !start to start timer and allow bot to enter user's voice channel
+
 !2 for phase 2 (use after 1.75 HP bars have depleted)
+
 !3 for phase 3 (use after 2.75 HP bars have depleted)
+
 !stop to disconnect the bot.
 
 # Known Bugs
