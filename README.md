@@ -3,7 +3,23 @@ Discord Bot for Time Keeping in MapleStory
 
 # Installation
 ### Currently experimenting with Heroku deployment
-Install all necessary and relevant packages on Linux server (entire list TBD). 
+Standard Heroku deployment procedures apply.
+
+Go to the [Discord Developer Portal](https://discordapp.com/developers/applications/) and create a project.
+Under the `Bot` section, create a bot and copy the Token.
+
+In addition, under project Settings -> Config Vars, put `SECRET_KEY` on the left and the copied Token on the right, then save.
+
+To install the necessary OPUS package (for mp3 creation), run:
+> $heroku buildpacks:set hitsounds/libopus
+
+**NOTE: If the installation fails, find [another libopus package here](https://elements.heroku.com/search/buildpacks?q=libopus). `opus` may also work here.**
+
+Then, assuming your heroku is properly setup, run using:
+> $git push heroku
+
+### Non-Heroku Deployment for Ubuntu 18.04
+Install all necessary and relevant packages on Linux server (see `requirements.txt`). 
 Currently, the only tested platform is Ubuntu 18.04. Other Linux distributions may work as well.
 
 > $touch secret_key.txt
@@ -14,7 +30,8 @@ Input the copied token into `secret_key.txt`.
 
 **MAKE SURE THE KEY IS CORRECT, OTHERWISE THE BOT WILL NOT RECOGNIZE YOUR DISCORD SERVER.**
 
-`$python3 bot.py
+To run:
+> $python3 app.py
 
 # Usage
 NOTE: Please do not use a command while the bot is speaking. It will crash due to OPUS limitations with Discord.
