@@ -153,7 +153,9 @@ async def on_message(message):
                 
                 # wait for 16s after entry to skip opening cutscene, as the announcement is being made
                 await asyncio.sleep(16)
-
+                msg = 'Fight has started. Starting first hourglass timer'
+                await client.send_message(message.channel, msg)
+                
                 phase = 1
                 started = True
                 await timer(vc, 150, 1634) # start timer at 29:44 in boss
