@@ -158,7 +158,7 @@ async def on_message(message):
                 
                 # wait for 16s after entry to skip opening cutscene, as the announcement is being made
                 await asyncio.sleep(16)
-                msg = 'Fight has started. Starting first hourglass timer'
+                msg = 'Fight has started. Starting first hourglass timer for 150s.'
                 await client.send_message(message.channel, msg)
                 
                 phases[vc.server.id] = 1
