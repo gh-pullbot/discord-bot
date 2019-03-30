@@ -2,7 +2,7 @@
 Discord Bot for Time Keeping in MapleStory
 
 # Installation
-### Currently experimenting with Heroku deployment
+## Currently experimenting with Heroku deployment
 Standard Heroku deployment procedures apply.
 
 Go to the [Discord Developer Portal](https://discordapp.com/developers/applications/) and create a project.
@@ -18,7 +18,7 @@ To install the necessary OPUS package (for mp3 creation), run:
 Then, assuming your heroku is properly setup, run using:
 > git push heroku
 
-### Non-Heroku Deployment for Ubuntu 18.04
+## Non-Heroku Deployment for Ubuntu 18.04
 Install all necessary and relevant packages on Linux server (see `requirements.txt`). 
 Currently, the only tested platform is Ubuntu 18.04. Other Linux distributions may work as well.
 
