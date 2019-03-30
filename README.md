@@ -60,6 +60,10 @@ Run the following commands. You will be asked for your password many times:
 
 **MAKE SURE THE KEY IS CORRECT, OTHERWISE THE BOT WILL NOT RECOGNIZE YOUR DISCORD SERVER.**
 
+**Before running the bot, please make sure to follow this link and approve the bot's entry to your Discord server. Replace CID with your [client id located here](http://prntscr.com/n4z8ts)**
+
+https://discordapp.com/api/oauth2/authorize?client_id=CID&permissions=36707584&scope=bot
+
 **Finally, to run the bot:**
 
 > python3 app.py
