@@ -5,7 +5,15 @@ Discord Bot for Time Keeping in MapleStory
 ## [OPUS DOES NOT WORK WITH HEROKU](https://stackoverflow.com/questions/53074580/discord-py-opus-heroku-issues)
 
 ## Non-Heroku Deployment for Ubuntu 18.04
-Install all necessary and relevant packages on Linux server (see `requirements.txt`). 
+Strongly suggested to use python 3.6.7.
+
+Install packages in `requirements.txt`.
+
+Then install libopus using:
+> sudo add-apt-repository ppa:jonathonf/ffmpeg-3
+> sudo apt-get update
+> sudo apt-get install libopus0 opus-tools
+
 Currently, the only tested platform is Ubuntu 18.04. Other Linux distributions may work as well.
 
 > touch secret_key.txt
