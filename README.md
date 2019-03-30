@@ -1,11 +1,21 @@
 # discord-bot
 Discord Bot for Time Keeping in MapleStory
 
-# Installation
-## [OPUS DOES NOT WORK WITH HEROKU](https://stackoverflow.com/questions/53074580/discord-py-opus-heroku-issues)
+# Installation / Deployment
+NOTE: [Unfortunately, Discord Voice Chat does not work with free web servers like Heroku](https://stackoverflow.com/questions/53074580/discord-py-opus-heroku-issues)
 
 ## Non-Heroku Deployment for Ubuntu 18.04
-Install all necessary and relevant packages on Linux server (see `requirements.txt`). 
+Strongly suggested to use python 3.6.7.
+
+Install packages in `requirements.txt`.
+
+Then [install libopus](http://ubuntuhandbook.org/index.php/2017/06/install-opus-1-2-audio-library-in-ubuntu-16-04-14-04/) using:
+> sudo add-apt-repository ppa:jonathonf/ffmpeg-3
+
+> sudo apt-get update
+
+> sudo apt-get install libopus0 opus-tools
+
 Currently, the only tested platform is Ubuntu 18.04. Other Linux distributions may work as well.
 
 > touch secret_key.txt
@@ -39,5 +49,5 @@ how to make the previous thread's ffmpeg player stop if a new audio request is s
 
 In other words, if the bot is already speaking and is asked to speak something else, it will crash.
 
-https://discordpy.readthedocs.io/en/latest/api.html#discord.VoiceClient.create_ffmpeg_player
-"Creates a stream player for ffmpeg that launches in a separate thread to play audio."
+["Creates a stream player for ffmpeg that launches in a separate thread to play audio."](https://discordpy.readthedocs.io/en/latest/api.html#discord.VoiceClient.create_ffmpeg_player)
+
