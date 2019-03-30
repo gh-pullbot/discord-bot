@@ -3,8 +3,10 @@ Discord Bot for Time Keeping in MapleStory
 
 This bot's timer is tuned for the Verus/True Hilla boss fight and can be deployed on up to as many servers as Discord allows per Application in the [Discord Developer Portal](https://discordapp.com/developers/applications/).
 
-Inspired by ThiefGMS and his insight/mp3 files into the Verus Hilla fight
-Special Thanks to MapleStory.gg and catboy on Discord for their contributions and hosting!
+Special Thanks to
+- **[ThiefGMS](https://www.youtube.com/channel/UCzCehIR4x1NHz67pOLsODmw)** for his mp3 files and insight into the Verus Hilla fight, as well as the inspiration for this project!
+- **[MapleStory.gg](https://maplestory.gg/)** for being the first to test and work with me
+- **catboy#7193** for cracking the concurrency and scalability problems
 
 Boss Timer Mechanics:
      16s from start to hourglass timer (29:44)
@@ -12,11 +14,7 @@ Boss Timer Mechanics:
      When HP hits 25% on the second HP bar, interval becomes 125s  (requires !2 input from the player)
      When HP hits 20% on the third HP bar, interval becomes 100s   (requires !3 input from the player)
 
-Possible Future Features:
- - Allow input of current clock time for soul split
-    - This is especially helpful after a phase change
-
-NOTE:
+**NOTE:**
 This bot may not always be 100% accurate to the real fight due to unresolvable latency issues with both the Nexon and Discord servers. There may be a variance of 0-5s from actual game.
 
 # Usage
@@ -107,6 +105,10 @@ NOTE: From what I understand, the bot needs to be properly approved via the OAut
 Multiple initial starting messages may appear if !start is used after !stop in under 16 seconds. This is due to asyncio.sleep(16) in !start. This is not a critical bug and does not affect the performance of the timer. 
 
 # To Do
+Possible Future Features:
+ - Allow input of current clock time for soul split
+    - Helpful in the event of player error, especially during a phase change
+    
 #####Resolved 3/30/19:
 **Concurrency Application and Scalability Limitations**
 Find ways to lessen the number of "Applications" under Discord Dev Portal and use fewer number of keys. Current implementation is one application/key per server, and the OAuth2 permission toggling is unclear.
