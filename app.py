@@ -33,16 +33,10 @@ https://discordpy.readthedocs.io/en/latest/api.html#discord.VoiceClient.create_f
 # client == bot
 client = discord.Client()
 
-try:
-    # try reading environment variables first (for Heroku)
-    # to put the Discord "Bot" secret Token key correctly, go to Heroku Settings
-    # and under Config Vars, put SECRET_KEY as key and the copied secret key then save
-    TOKEN = str(os.getenv("SECRET_KEY"))
-except:
-    # then try finding the secret_key.txt file for the key (for local deployments)
-    token_file = open('secret_key.txt', 'r')
-    TOKEN = token_file.read() # make a file called secret_key.txt and replace with key
-    TOKEN = TOKEN.rstrip()
+# then try finding the secret_key.txt file for the key (for local deployments)
+token_file = open('secret_key.txt', 'r')
+TOKEN = token_file.read() # make a file called secret_key.txt and replace with key
+TOKEN = TOKEN.rstrip()
 
 # open and load OPUS library for voice chat support and transcoding
 opuslib = find_library('opus') # Linux-based function
