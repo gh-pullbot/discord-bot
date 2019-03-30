@@ -1,5 +1,6 @@
+discord==0.16.12
 discord.py==0.16.12
 pyttsx3
 asyncio
-pynacl==1.2.1
+pynacl
 pip
