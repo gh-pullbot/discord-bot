@@ -1,6 +1,4 @@
 discord
-django
-gunicorn
 pyttsx3
 asyncio
 pynacl==1.2.1
