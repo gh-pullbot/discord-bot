@@ -66,33 +66,51 @@ async def timer(vc, interval, boss_time):
     while True:
         # boss_time first starts at 1784 seconds, or 29:44
         log('Timer has started at boss time: {} in the {} channel in {} server.'\
-            .format(boss_time, vc.channel, vc.server))
+            .format(short_minutes_and_seconds(boss_time + interval), vc.channel, vc.server))
         
         # text to speech
         # 60s warning
         log('Starting {}s timer on the {} channel in {} server.'\
             .format(interval, vc.channel, vc.server))
         await asyncio.sleep(interval - 60)
+        if phases[vc.server.id] == 0:
+            # if bot disconnected while sleeping, stop the thread
+            break
+        
         bot_speak(vc, 'a60seconds.mp3')
         
         # 30s warning
         await asyncio.sleep(30)
+        if phases[vc.server.id] == 0:
+            # if bot disconnected while sleeping, stop the thread
+            break
+
         bot_speak(vc, 'a30seconds.mp3')
         
         # 15s warning
         await asyncio.sleep(15)
+        if phases[vc.server.id] == 0:
+            # if bot disconnected while sleeping, stop the thread
+            break
+
         bot_speak(vc, 'a15seconds.mp3')
         
         # 5s warning
         await asyncio.sleep(10)
+        if phases[vc.server.id] == 0:
+            # if bot disconnected while sleeping, stop the thread
+            break
+
         bot_speak(vc, 'a5seconds.mp3')
         
         # 0s soul split announcement
         await asyncio.sleep(5)
+        if phases[vc.server.id] == 0:
+            # if bot disconnected while sleeping, stop the thread
+            break
         
         # update internal representation of boss clock
-        boss_time -= interval
-        mins_and_secs = seconds_to_minutes_and_seconds(boss_time)
+        mins_and_secs = minutes_and_seconds(boss_time)
         
         # generate wav file to say "soul split at xx:xx"
         # unfortunately, this uses a really creepy low voice, but I really can't find
@@ -102,11 +120,14 @@ async def timer(vc, interval, boss_time):
         bot_speak(vc, '{}soulsplit.wav'.format(vc.server.id)) # play the correct vc/server's file
         
         # if phase changed, start timer again with less time
+        if phases[vc.server.id] == 1:
+            await timer(vc, 150, boss_time - 150)
+            break
         if phases[vc.server.id] == 2:
-            await timer(vc, 125, boss_time)
+            await timer(vc, 125, boss_time - 125)
             break # so previous thread of timer stops and returns
         elif phases[vc.server.id] == 3:
-            await timer(vc, 100, boss_time)
+            await timer(vc, 100, boss_time - 100)
             break
 
 # responding to an external user message
@@ -147,8 +168,9 @@ async def on_message(message):
                 msg = 'Verus Hilla timer has started in the {} channel.'.format(vc.channel)
                 await client.send_message(message.channel, msg)
 
-                # (re-)initialize the phase for that server
-                phases[vc.server.id] = 1 
+                # (re-)initialize the phase/vc for that server
+                phases[vc.server.id] = 1
+                vcs[vc.server.id] = vc
 
                 # play the start.mp3 file, which says "hilla fight starting, good luck"
                 bot_speak(vc, 'start.mp3')
@@ -156,11 +178,17 @@ async def on_message(message):
                 # wait for 16s after entry to skip opening cutscene, as the announcement is being made
                 await asyncio.sleep(16)
 
-                # tell the party the fight has started in chat
-                msg = 'Fight has started. Starting first hourglass timer for 150s.'
-                await client.send_message(message.channel, msg)
+                if phases[vc.server.id] != 0:
+                    # if bot did not disconnect during sleep                    
+                    # tell the party the fight has started in chat
+                    # Bot may send this message multiple times if it is restarted before 16s sleep is over
+                    # Does not influence timer or voice chat, they're just ghost threads that will die
+                    # once !stop is calling again.
+                    msg = 'Fight has started. Starting first 150s timer.'
+                    msg += '\nIf you see this message multiple times, ignore it.'
+                    await client.send_message(message.channel, msg)
 
-                await timer(vc, 150, 1634) # start timer 150s at 29:44 in boss
+                    await timer(vc, 150, 1634) # start timer 150s at 29:44 in boss
             else:
                 # if sender is not in VC, don't join and ask the sender to please join
                 msg = 'Please join a voice channel first and re-use the command for bot to join.'
@@ -212,7 +240,7 @@ async def on_message(message):
         log('!3 called by {} on {} server has finished.'.format(author, server))
 
     # disconnect from server
-    if message.content.startswith('!stop'):
+    if message.content.startswith('!stop') or message.content.startswith('!leave'):
         # find the voice chat corresponding to the message and disconnect
         if client.is_voice_connected(server):     # if bot is in a vc
             vc = find_bot_voice_client(server.id) # find the vc
@@ -221,6 +249,8 @@ async def on_message(message):
             if author_in_vc(author, vc):
                 # if the author is an admin or is in the vc with the bot
                 await vc.disconnect()                 # disconnect from voice channel
+                phases[vc.server.id] = 0
+                del vcs[vc.server.id]                 # delete the voice channel from dict
                 msg = 'Disconnected from {}.'.format(vc.channel)
             else:
                 msg = 'You are not in the voice chat or an administrator.'
@@ -239,11 +269,16 @@ def author_in_vc(author, vc):
     Returns: True/False
     '''
     for member in vc.server.members:
-        print('Member {} is currently in {} voice channel.'.format(member, member.voice_channel))
-        print('Bot is in {} vc'.format(vc.channel.name))
-        if member.voice.voice_channel.id == vc.channel.id:
-            return True
-
+#        log('{} is in the {} server. The bot is in the {} server.'.format(member, member.server, vc.channel))
+        try:
+            # need to compare ids and not just channel names because names are not unique
+            # (e.g. two channels can have the same name)
+            if member.voice.voice_channel.id == vc.channel.id:
+                return True
+        except AttributeError: # NoneType object has no attribute 'id'
+            # this will happen if someone outside of the vc tries to use the command 
+            continue
+            
     return False
         
 def find_bot_voice_client(server_id):
@@ -263,9 +298,9 @@ def find_bot_voice_client(server_id):
             
     return vcs[server_id]
     
-def seconds_to_minutes_and_seconds(seconds):
+def minutes_and_seconds(seconds):
     '''
-    Converts seconds to minutes and seconds
+    Converts seconds to minutes and seconds (xx minutes xx seconds)
 
     Inputs: String seconds
     Returns: String representation with minutes and seconds
@@ -273,6 +308,20 @@ def seconds_to_minutes_and_seconds(seconds):
     mins = int(seconds / 60)
     secs = seconds % 60
     mins_and_secs = str(mins) + " minutes " + str(secs) + " seconds"
+    return mins_and_secs
+
+def short_minutes_and_seconds(seconds):
+    '''
+    Converts seconds to minutes and seconds (xx:xx format)
+
+    This is mostly used for convenient logging.
+
+    Inputs: String seconds
+    Returns: String representation with minutes and seconds
+    '''
+    mins = int(seconds / 60)
+    secs = seconds % 60
+    mins_and_secs = str(mins) + ":" + str(secs)
     return mins_and_secs
 
 def generate_speech_wav(vc, text):
