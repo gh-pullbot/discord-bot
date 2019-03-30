@@ -18,13 +18,13 @@ Run the following commands. You will be asked for your password many times:
 
 **NOTE:** For Linux beginners, "Do you want to continue? [Y/n]", just type y and press ENTER.
 
-**Update apt:**
+**1) Update apt:**
 
 > sudo add-apt-repository universe
 
 > sudo apt update
 
-**Install Python 3.6.7, Pip3, [Espeak](http://espeak.sourceforge.net/), and [FFMPEG](https://linuxize.com/post/how-to-install-ffmpeg-on-ubuntu-18-04/):**
+**2) Install Python 3.6.7, Pip3, [Espeak](http://espeak.sourceforge.net/), and [FFMPEG](https://linuxize.com/post/how-to-install-ffmpeg-on-ubuntu-18-04/):**
 
 > sudo apt install python3-pip
 
@@ -32,7 +32,7 @@ Run the following commands. You will be asked for your password many times:
 
 > sudo apt install ffmpeg
 
-**Clone this repository and install required Pip packages:**
+**3) Clone this repository and install required Pip packages:**
 
 > git clone https://github.com/CodeSammich/discord-bot
 
@@ -40,18 +40,18 @@ Run the following commands. You will be asked for your password many times:
 
 > pip3 install -r `requirements.txt`
 
-**[Install libopus](http://ubuntuhandbook.org/index.php/2017/06/install-opus-1-2-audio-library-in-ubuntu-16-04-14-04/):**
+**4) [Install libopus](http://ubuntuhandbook.org/index.php/2017/06/install-opus-1-2-audio-library-in-ubuntu-16-04-14-04/):**
 > sudo add-apt-repository ppa:jonathonf/ffmpeg-3
 
 > sudo apt update
 
 > sudo apt install libopus0 opus-tools
 
-**Create a file for the Discord bot secret key:**
+**5) Create a file for the Discord bot secret key:**
 
 > touch secret_key.txt
 
-**Go to the [Discord Developer Portal](https://discordapp.com/developers/applications/) and create a project.**
+**6) Go to the [Discord Developer Portal](https://discordapp.com/developers/applications/) and create a project.**
 **Under the `Bot` section, create a bot and copy the Token by clicking `Copy`.**
 
 **Then, right click on the Ubuntu window to paste into the command line (where "key" is, no "" quotes):**
@@ -60,15 +60,17 @@ Run the following commands. You will be asked for your password many times:
 
 **MAKE SURE THE KEY IS CORRECT, OTHERWISE THE BOT WILL NOT RECOGNIZE YOUR DISCORD SERVER.**
 
-**Before running the bot, please make sure to follow this link and approve the bot's entry to your Discord server. Replace CID with your [client id located here](http://prntscr.com/n4z8ts)**
+**7) Before running the bot, please make sure to follow this link and approve the bot's entry to your Discord server. Replace CID with your [client id located here](http://prntscr.com/n4z8ts)**
 
 https://discordapp.com/api/oauth2/authorize?client_id=CID&permissions=36707584&scope=bot
 
-**Finally, to run the bot:**
+**8) Finally, to run the bot:**
 
 > python3 app.py
 
 **You should see a message [like this](http://prntscr.com/n4yrzt)**
+
+NOTE: From what I understand, the bot needs to be properly approved via the OAuth2 link BEFORE running on the server. I am not sure about this. 
 
 # Usage
 NOTE: Please do not use a command while the bot is speaking. It will crash due to OPUS limitations with Discord.
@@ -96,3 +98,7 @@ In other words, if the bot is already speaking and is asked to speak something e
 
 ["Creates a stream player for ffmpeg that launches in a separate thread to play audio."](https://discordpy.readthedocs.io/en/latest/api.html#discord.VoiceClient.create_ffmpeg_player)
 
+# To Do
+Find ways to lessen the number of "Applications" under Discord Dev Portal and use fewer number of keys. Current implementation is one application/key per server, and the OAuth2 permission toggling is unclear.
+
+Possible research directions on how to further scale bot: Pink Bean, NightBot, MEE6, Carl-bot
