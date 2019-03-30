@@ -1,15 +1,15 @@
 # discord-bot
 Discord Bot for Time Keeping in MapleStory
 
-# Installation
-## [OPUS DOES NOT WORK WITH HEROKU](https://stackoverflow.com/questions/53074580/discord-py-opus-heroku-issues)
+# Installation / Deployment
+NOTE: [Unfortunately, Discord Voice Chat does not work with free web servers like Heroku](https://stackoverflow.com/questions/53074580/discord-py-opus-heroku-issues)
 
 ## Non-Heroku Deployment for Ubuntu 18.04
 Strongly suggested to use python 3.6.7.
 
 Install packages in `requirements.txt`.
 
-Then install libopus using:
+Then [install libopus](http://ubuntuhandbook.org/index.php/2017/06/install-opus-1-2-audio-library-in-ubuntu-16-04-14-04/) using:
 > sudo add-apt-repository ppa:jonathonf/ffmpeg-3
 
 > sudo apt-get update
