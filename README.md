@@ -61,6 +61,8 @@ Finally, to run the bot:
 
 > python3 app.py
 
+You should see a message [like this](http://prntscr.com/n4yrzt)
+
 # Usage
 NOTE: Please do not use a command while the bot is speaking. It will crash due to OPUS limitations with Discord.
 
