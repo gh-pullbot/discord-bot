@@ -4,29 +4,61 @@ Discord Bot for Time Keeping in MapleStory
 # Installation / Deployment
 NOTE: [Unfortunately, Discord Voice Chat does not work with free web servers like Heroku](https://stackoverflow.com/questions/53074580/discord-py-opus-heroku-issues)
 
-## Non-Heroku Deployment for Ubuntu 18.04
-Strongly suggested to use python 3.6.7.
+# For Local Windows Use
+You must install Ubuntu 18.04 via the Windows Store. Once installed, run, and you will be asked to enter a new UNIX username and password. Make sure to type accurately and carefully. You will not be able to see your password when typing it.
 
-Install packages in `requirements.txt`.
+Continue onto the following section once you are done.
 
-Then [install libopus](http://ubuntuhandbook.org/index.php/2017/06/install-opus-1-2-audio-library-in-ubuntu-16-04-14-04/) using:
+## Deployment for Ubuntu 18.04
+Currently, the only tested platform is Ubuntu 18.04. Other Linux distributions may work as well.
+
+Strongly suggested to use Python 3.6.7.
+
+NOTE: For Linux beginners, "Do you want to continue? [Y/n]", just type y and press ENTER.
+
+Run the following commands. You will be asked for your password many times:
+Update apt
+
+> sudo add-apt-repository universe
+
+> sudo apt update
+
+Install Python 3.6.7, Pip3, and [Espeak](http://espeak.sourceforge.net/):
+
+> sudo apt install python3-pip
+
+> sudo apt install espeak
+
+Clone this repository and install required Pip packages:
+
+> git clone https://github.com/CodeSammich/discord-bot
+
+> cd discord-bot
+
+> pip3 install -r `requirements.txt`
+
+[Install libopus](http://ubuntuhandbook.org/index.php/2017/06/install-opus-1-2-audio-library-in-ubuntu-16-04-14-04/):
 > sudo add-apt-repository ppa:jonathonf/ffmpeg-3
 
 > sudo apt-get update
 
 > sudo apt-get install libopus0 opus-tools
 
-Currently, the only tested platform is Ubuntu 18.04. Other Linux distributions may work as well.
+Create a file for the Discord bot secret key
 
 > touch secret_key.txt
 
 Go to the [Discord Developer Portal](https://discordapp.com/developers/applications/) and create a project.
-Under the `Bot` section, create a bot and copy the Token.
-Input the copied token into `secret_key.txt`.
+Under the `Bot` section, create a bot and copy the Token by clicking `Copy`.
+
+Then, right click on the Ubuntu window to paste into the command line (where "key" is, no "" quotes).
+  
+> echo "key" >> secret_key.txt
 
 **MAKE SURE THE KEY IS CORRECT, OTHERWISE THE BOT WILL NOT RECOGNIZE YOUR DISCORD SERVER.**
 
-To run:
+Finally, to run the bot:
+
 > python3 app.py
 
 # Usage
