@@ -204,7 +204,6 @@ async def on_message(message):
                 await x.disconnect()
                 msg = "Disconnected from " + str(x.server) + " server"
                 await client.send_message(message.channel, msg)
-                break
 
 def find_bot_voice_client():
     vcs = list(client.voice_clients)
