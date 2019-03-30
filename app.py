@@ -7,7 +7,6 @@ from ctypes.util import find_library
 import pyttsx3
 import os
 
-
 # Inspired by ThiefGMS and his insight/mp3 files into the Verus Hilla fight
 # 16s from start to hourglass timer (29:44)
 # first interval 150s (27:14)
