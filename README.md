@@ -11,7 +11,9 @@ Install packages in `requirements.txt`.
 
 Then install libopus using:
 > sudo add-apt-repository ppa:jonathonf/ffmpeg-3
+
 > sudo apt-get update
+
 > sudo apt-get install libopus0 opus-tools
 
 Currently, the only tested platform is Ubuntu 18.04. Other Linux distributions may work as well.
