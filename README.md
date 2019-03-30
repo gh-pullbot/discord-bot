@@ -17,13 +17,13 @@ Strongly suggested to use Python 3.6.7.
 Run the following commands. You will be asked for your password many times:
 **NOTE:** For Linux beginners, "Do you want to continue? [Y/n]", just type y and press ENTER.
 
-**Update apt**
+**Update apt:**
 
 > sudo add-apt-repository universe
 
 > sudo apt update
 
-**Install Python 3.6.7, Pip3, and [Espeak]**(http://espeak.sourceforge.net/):
+**Install Python 3.6.7, Pip3, and [Espeak](http://espeak.sourceforge.net/):**
 
 > sudo apt install python3-pip
 
@@ -37,21 +37,21 @@ Run the following commands. You will be asked for your password many times:
 
 > pip3 install -r `requirements.txt`
 
-**[Install libopus]**(http://ubuntuhandbook.org/index.php/2017/06/install-opus-1-2-audio-library-in-ubuntu-16-04-14-04/):
+**[Install libopus](http://ubuntuhandbook.org/index.php/2017/06/install-opus-1-2-audio-library-in-ubuntu-16-04-14-04/):**
 > sudo add-apt-repository ppa:jonathonf/ffmpeg-3
 
 > sudo apt update
 
 > sudo apt install libopus0 opus-tools
 
-**Create a file for the Discord bot secret key**
+**Create a file for the Discord bot secret key:**
 
 > touch secret_key.txt
 
 **Go to the [Discord Developer Portal](https://discordapp.com/developers/applications/) and create a project.**
 **Under the `Bot` section, create a bot and copy the Token by clicking `Copy`.**
 
-**Then, right click on the Ubuntu window to paste into the command line (where "key" is, no "" quotes).**
+**Then, right click on the Ubuntu window to paste into the command line (where "key" is, no "" quotes):**
   
 > echo "key" >> secret_key.txt
 
