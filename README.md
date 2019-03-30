@@ -49,5 +49,5 @@ how to make the previous thread's ffmpeg player stop if a new audio request is s
 
 In other words, if the bot is already speaking and is asked to speak something else, it will crash.
 
-https://discordpy.readthedocs.io/en/latest/api.html#discord.VoiceClient.create_ffmpeg_player
-"Creates a stream player for ffmpeg that launches in a separate thread to play audio."
+["Creates a stream player for ffmpeg that launches in a separate thread to play audio."](https://discordpy.readthedocs.io/en/latest/api.html#discord.VoiceClient.create_ffmpeg_player)
+
