@@ -15,6 +15,7 @@ Currently, the only tested platform is Ubuntu 18.04. Other Linux distributions m
 Strongly suggested to use Python 3.6.7.
 
 Run the following commands. You will be asked for your password many times:
+
 **NOTE:** For Linux beginners, "Do you want to continue? [Y/n]", just type y and press ENTER.
 
 **Update apt:**
