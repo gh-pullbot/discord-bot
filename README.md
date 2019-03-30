@@ -14,22 +14,22 @@ Currently, the only tested platform is Ubuntu 18.04. Other Linux distributions m
 
 Strongly suggested to use Python 3.6.7.
 
-NOTE: For Linux beginners, "Do you want to continue? [Y/n]", just type y and press ENTER.
-
 Run the following commands. You will be asked for your password many times:
-Update apt
+**NOTE:** For Linux beginners, "Do you want to continue? [Y/n]", just type y and press ENTER.
+
+**Update apt**
 
 > sudo add-apt-repository universe
 
 > sudo apt update
 
-Install Python 3.6.7, Pip3, and [Espeak](http://espeak.sourceforge.net/):
+**Install Python 3.6.7, Pip3, and [Espeak]**(http://espeak.sourceforge.net/):
 
 > sudo apt install python3-pip
 
 > sudo apt install espeak
 
-Clone this repository and install required Pip packages:
+**Clone this repository and install required Pip packages:**
 
 > git clone https://github.com/CodeSammich/discord-bot
 
@@ -37,31 +37,31 @@ Clone this repository and install required Pip packages:
 
 > pip3 install -r `requirements.txt`
 
-[Install libopus](http://ubuntuhandbook.org/index.php/2017/06/install-opus-1-2-audio-library-in-ubuntu-16-04-14-04/):
+**[Install libopus]**(http://ubuntuhandbook.org/index.php/2017/06/install-opus-1-2-audio-library-in-ubuntu-16-04-14-04/):
 > sudo add-apt-repository ppa:jonathonf/ffmpeg-3
 
 > sudo apt update
 
 > sudo apt install libopus0 opus-tools
 
-Create a file for the Discord bot secret key
+**Create a file for the Discord bot secret key**
 
 > touch secret_key.txt
 
-Go to the [Discord Developer Portal](https://discordapp.com/developers/applications/) and create a project.
-Under the `Bot` section, create a bot and copy the Token by clicking `Copy`.
+**Go to the [Discord Developer Portal](https://discordapp.com/developers/applications/) and create a project.**
+**Under the `Bot` section, create a bot and copy the Token by clicking `Copy`.**
 
-Then, right click on the Ubuntu window to paste into the command line (where "key" is, no "" quotes).
+**Then, right click on the Ubuntu window to paste into the command line (where "key" is, no "" quotes).**
   
 > echo "key" >> secret_key.txt
 
 **MAKE SURE THE KEY IS CORRECT, OTHERWISE THE BOT WILL NOT RECOGNIZE YOUR DISCORD SERVER.**
 
-Finally, to run the bot:
+**Finally, to run the bot:**
 
 > python3 app.py
 
-You should see a message [like this](http://prntscr.com/n4yrzt)
+**You should see a message [like this](http://prntscr.com/n4yrzt)**
 
 # Usage
 NOTE: Please do not use a command while the bot is speaking. It will crash due to OPUS limitations with Discord.
