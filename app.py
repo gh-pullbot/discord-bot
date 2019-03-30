@@ -49,7 +49,11 @@ engine.setProperty('volume', 1)
 
 # keep track of 15s, 30s, and 60s
 phase = 0
-started = False
+
+# dicts holding various information, key is vc.server.id (unique to each server)
+ffmpeg_players = {}
+phases = {}
+vcs = {}
 
 @client.event
 async def on_ready():
@@ -63,13 +67,14 @@ async def on_ready():
     log('------')
 
 async def timer(vc, interval, boss_time):
+    global phases
     while True:
         # boss_time first starts at 1784 seconds, or 29:44
         log('timer has started at boss time: ' + str(seconds_to_minutes_and_seconds(boss_time)))
         
         # text to speech
         # 60s
-        log("starting timer for " + str(interval) + " seconds")
+        log('Starting {} timer on {} server.'.format(interval, vc.server.id))
         await asyncio.sleep(interval - 60)
         bot_speak(vc, 'a60seconds.mp3')
         
@@ -100,17 +105,17 @@ async def timer(vc, interval, boss_time):
         bot_speak(vc, 'soulsplit.wav')
         
         # if phase changed, start timer again with less time
-        if phase == 2:
+        if phases[vc.server.id] == 2:
             await timer(vc, 125, boss_time)
             break # so previous thread of timer stops and returns
-        elif phase == 3:
+        elif phases[vc.server.id] == 3:
             await timer(vc, 100, boss_time)
             break
 
 # responding to an external user message
 @client.event
 async def on_message(message):
-    global phase
+    global phases
     # message sender's parameters
     author = message.author
     channel = message.channel
@@ -141,7 +146,7 @@ async def on_message(message):
                 # if author is in a VC, join and send ACK
                 vc = await client.join_voice_channel(call)
                 msg = 'Verus Hilla timer started. Bot has joined VC'
-                msg += '\nPlease do not use a command while the bot is speaking. It will crash.'
+#                msg += '\nPlease do not use a command while the bot is speaking. It will crash.'
                 msg += '\nCommands include:'
                 msg += '\n     !2 for phase 2 (use after 1.75 HP bars have depleted)'
                 msg += '\n     !3 for phase 3 (use after 2.75 HP bars have depleted)'
@@ -156,8 +161,7 @@ async def on_message(message):
                 msg = 'Fight has started. Starting first hourglass timer'
                 await client.send_message(message.channel, msg)
                 
-                phase = 1
-                started = True
+                phases[vc.server.id] = 1
                 await timer(vc, 150, 1634) # start timer at 29:44 in boss
             else:
                 # if author is not in VC, don't join and ask author to please join
@@ -173,8 +177,8 @@ async def on_message(message):
     if message.content.startswith('!2'):
         if client.is_voice_connected(server):
             # bot's currently voice channel
-            phase = 2
-            vc = find_bot_voice_client()
+            vc = find_bot_voice_client(server.id)
+            phases[vc.server.id] = 2
             bot_speak(vc, '125.mp3') # say interval is now 125s
             msg = 'Split interval now 125 seconds. Will start after next soul split.'
         else:
@@ -188,8 +192,8 @@ async def on_message(message):
     if message.content.startswith('!3'):
         if client.is_voice_connected(server):
             # bot's currently voice channel
-            phase = 3
-            vc = find_bot_voice_client()
+            vc = find_bot_voice_client(server.id)
+            phases[vc.server.id] = 3
             bot_speak(vc, '100.mp3') # say interval is now 125s
             msg = 'Split interval now 100 seconds. Will start after next soul split.'
         else:
@@ -201,17 +205,22 @@ async def on_message(message):
 
     # disconnect from server
     if message.content.startswith('!stop'):
-        for x in client.voice_clients:
-            if x.server == server:
-                await x.disconnect()
-                msg = "Disconnected from " + str(x.server) + " server"
-                await client.send_message(message.channel, msg)
-                break
+        vc = find_bot_voice_client(server.id)
+        await vc.disconnect()
+        msg = 'Disconnected from {} server'.format(vc.server)
+        await client.send_message(message.channel, msg)
 
-def find_bot_voice_client():
-    vcs = list(client.voice_clients)
-    vc = vcs[0] # could index more robustly when bot is used by mult. ppl
-    return vc
+def find_bot_voice_client(server_id):
+    # updates the vcs list w/ current voice connections
+    # returns the vc corresponding to the bot's server
+    
+    # update vcs dict with current vc connections iterable
+    for vc in client.voice_clients:
+        # add vc to vcs dict if not already there
+        if vc.server.id not in vcs.keys():
+            vcs[vc.server.id] = vc
+            
+    return vcs[server_id]
     
 def seconds_to_minutes_and_seconds(seconds):
     mins = int(seconds / 60)
@@ -233,5 +242,22 @@ def bot_speak(vc, mp3_name):
 def log(line):
     dateStr = datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S')
     print('[' + dateStr + '] ' + line)
+
+def bot_speak(vc, mp3_name):
+    # retain a mapping of voice sessions to players
+    # if a session has a voice line in progress, stop and terminate it before playing the next one
+    global ffmpeg_players # so dictionaries can always be accessed, even by async calls
+
+    if not vc.is_connected:
+        return
+
+    if vc.server.id in ffmpeg_players:
+        log('stopped {}'.format(vc.server.id))
+        ffmpeg_players[vc.server.id].stop()
+        ffmpeg_players.pop(vc.server.id, None)
+
+    log('playing {} in {}'.format(mp3_name, vc.server.id))
+    ffmpeg_players[vc.server.id] = vc.create_ffmpeg_player(mp3_name, after=lambda: log('speech is done'))
+    ffmpeg_players[vc.server.id].start()
     
 client.run(TOKEN)
