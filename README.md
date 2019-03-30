@@ -4,12 +4,12 @@ Discord Bot for Time Keeping in MapleStory
 # Installation / Deployment
 NOTE: [Unfortunately, Discord Voice Chat does not work with free web servers like Heroku](https://stackoverflow.com/questions/53074580/discord-py-opus-heroku-issues)
 
-# For Local Windows Use
+### For Local Windows Use
 You must install Ubuntu 18.04 via the Windows Store. Once installed, run, and you will be asked to enter a new UNIX username and password. Make sure to type accurately and carefully. You will not be able to see your password when typing it.
 
 Continue onto the following section once you are done.
 
-## Deployment for Ubuntu 18.04
+### Deployment for Ubuntu 18.04
 Currently, the only tested platform is Ubuntu 18.04. Other Linux distributions may work as well.
 
 Strongly suggested to use Python 3.6.7.
@@ -40,9 +40,9 @@ Clone this repository and install required Pip packages:
 [Install libopus](http://ubuntuhandbook.org/index.php/2017/06/install-opus-1-2-audio-library-in-ubuntu-16-04-14-04/):
 > sudo add-apt-repository ppa:jonathonf/ffmpeg-3
 
-> sudo apt-get update
+> sudo apt update
 
-> sudo apt-get install libopus0 opus-tools
+> sudo apt install libopus0 opus-tools
 
 Create a file for the Discord bot secret key
 
