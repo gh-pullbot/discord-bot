@@ -102,3 +102,5 @@ In other words, if the bot is already speaking and is asked to speak something e
 Find ways to lessen the number of "Applications" under Discord Dev Portal and use fewer number of keys. Current implementation is one application/key per server, and the OAuth2 permission toggling is unclear.
 
 Possible research directions on how to further scale bot: Pink Bean, NightBot, MEE6, Carl-bot
+
+https://discordapp.com/developers/docs/topics/oauth2#bots
