@@ -98,7 +98,7 @@ async def timer(vc, interval, boss_time):
         # unfortunately, this uses a really creepy low voice, but I really can't find
         # anything better for free. Google TTS is amazing, but requires real $$$
         soul_split_at_xx_xx = '\"soul. split. at. ' + mins_and_secs + '"'
-        generate_speech_wav(soul_split_at_xx_xx)
+        generate_speech_wav(vc, soul_split_at_xx_xx)
         bot_speak(vc, '{}soulsplit.wav'.format(vc.server.id)) # play the correct vc/server's file
         
         # if phase changed, start timer again with less time
@@ -217,7 +217,8 @@ async def on_message(message):
         if client.is_voice_connected(server):     # if bot is in a vc
             vc = find_bot_voice_client(server.id) # find the vc
 
-            if author.server_permissions.administrator or author_in_vc(author, vc):
+#            if author.server_permissions.administrator or author_in_vc(author, vc):
+            if author_in_vc(author, vc):
                 # if the author is an admin or is in the vc with the bot
                 await vc.disconnect()                 # disconnect from voice channel
                 msg = 'Disconnected from {}.'.format(vc.channel)
@@ -237,8 +238,10 @@ def author_in_vc(author, vc):
     Inputs: String author
     Returns: True/False
     '''
-    for member in client.get_all_members():
-        if member.voice.voice_channel == vc:
+    for member in vc.server.members:
+        print('Member {} is currently in {} voice channel.'.format(member, member.voice_channel))
+        print('Bot is in {} vc'.format(vc.channel.name))
+        if member.voice.voice_channel.id == vc.channel.id:
             return True
 
     return False
