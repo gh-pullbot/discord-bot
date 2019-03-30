@@ -37,7 +37,7 @@ client = discord.Client()
 try:
     # try reading environment variables first (for Heroku)
     # to put the Discord "Bot" secret Token key correctly, go to Heroku Settings
-    # and under Config Vars, put SECRET_KEY as key and the copied secret key and save
+    # and under Config Vars, put SECRET_KEY as key and the copied secret key then save
     TOKEN = str(os.getenv("SECRET_KEY"))
 except:
     # then try finding the secret_key.txt file for the key (for local deployments)
