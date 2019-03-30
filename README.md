@@ -1,7 +1,9 @@
 # discord-bot
 Discord Bot for Time Keeping in MapleStory
 
-This bot's timer is tuned for the Verus/True Hilla boss fight and can be deployed on up to as many servers as Discord allows per Application in the [Discord Developer Portal](https://discordapp.com/developers/applications/).
+This bot's timer is tuned for the Verus/True Hilla boss fight.
+
+It can be deployed on up to as many servers per host as Discord allows per Application in the [Discord Developer Portal](https://discordapp.com/developers/applications/).
 
 Special Thanks to
 - **[ThiefGMS](https://www.youtube.com/channel/UCzCehIR4x1NHz67pOLsODmw)** for his mp3 files and insight into the Verus Hilla fight, as well as the inspiration for this project!
