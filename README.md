@@ -24,11 +24,13 @@ Run the following commands. You will be asked for your password many times:
 
 > sudo apt update
 
-**Install Python 3.6.7, Pip3, and [Espeak](http://espeak.sourceforge.net/):**
+**Install Python 3.6.7, Pip3, [Espeak](http://espeak.sourceforge.net/), and [FFMPEG](https://linuxize.com/post/how-to-install-ffmpeg-on-ubuntu-18-04/):**
 
 > sudo apt install python3-pip
 
 > sudo apt install espeak
+
+> sudo apt install ffmpeg
 
 **Clone this repository and install required Pip packages:**
 
