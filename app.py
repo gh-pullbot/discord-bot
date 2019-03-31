@@ -162,12 +162,18 @@ async def on_message(message):
             # if the bot is not in a voice channel yet
             if call != None:
                 # if sender is in a voice channel, join the vc
-                vc = await client.join_voice_channel(call) 
-                
+                print(call)
+                try:
+                    vc = await client.join_voice_channel(call)
+                except asyncio.TimeoutError:
+                    msg = 'Cannot connect to channel, request timed out.'
+                    await client.send_message(message.channel, msg)
+                    break
+
                 # tell the party the timer has begun in the chat
                 msg = 'Verus Hilla timer has started in the {} channel.'.format(vc.channel)
                 await client.send_message(message.channel, msg)
-
+                
                 # (re-)initialize the phase/vc for that server
                 phases[vc.server.id] = 1
                 vcs[vc.server.id] = vc
