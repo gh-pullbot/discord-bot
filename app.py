@@ -156,7 +156,7 @@ async def on_message(message):
         msg += '\n     !stop to disconnect the bot.'
         await client.send_message(message.channel, msg)
         
-    if message.content.startswith('!start'):
+    if message.content.startswith('!start') or message.content.startswith('!join') or message.content.startswith('!fight'):
         # Joins the voice chat of the person who used the command
         if not client.is_voice_connected(server):
             # if the bot is not in a voice channel yet
