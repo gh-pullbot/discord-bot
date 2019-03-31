@@ -53,6 +53,8 @@ This bot may not always be 100% accurate to the real fight due to unresolvable l
 You must either deploy **locally** or on a **paid cloud server** (e.g. AWS, DigitalOcean).
 
 ## Local Windows
+Primarily for players who want to host the bot for personal use during gameplay. This method is not recommended for long-term hosting.
+
 You must install [Ubuntu 18.04 via the Windows Store](https://www.microsoft.com/en-us/p/ubuntu-1804-lts/9n9tngvndl3q?activetab=pivot:overviewtab). 
 
 Once installed, run, and you will be asked to enter a new UNIX username and password. Make sure to type accurately and carefully. You will not be able to see your password when typing it.
