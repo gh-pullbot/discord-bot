@@ -165,36 +165,35 @@ async def on_message(message):
                 print(call)
                 try:
                     vc = await client.join_voice_channel(call)
+
+                    # tell the party the timer has begun in the chat
+                    msg = 'Verus Hilla timer has started in the {} channel.'.format(vc.channel)
+                    await client.send_message(message.channel, msg)
+                
+                    # (re-)initialize the phase/vc for that server
+                    phases[vc.server.id] = 1
+                    vcs[vc.server.id] = vc
+
+                    # play the start.mp3 file, which says "hilla fight starting, good luck"
+                    bot_speak(vc, 'start.mp3')
+                
+                    # wait for 16s after entry to skip opening cutscene, as the announcement is being made
+                    await asyncio.sleep(16)
+
+                    if phases[vc.server.id] != 0:
+                        # if bot did not disconnect during sleep                    
+                        # tell the party the fight has started in chat
+                        # Bot may send this message multiple times if it is restarted before 16s sleep is over
+                        # Does not influence timer or voice chat, they're just ghost threads that will die
+                        # once !stop is calling again.
+                        msg = 'Fight has started. Starting first 150s timer.'
+                        msg += '\nIf you see this message multiple times, ignore it.'
+                        await client.send_message(message.channel, msg)
+
+                        await timer(vc, 150, 1634) # start timer 150s at 29:4
                 except asyncio.TimeoutError:
-                    msg = 'Cannot connect to channel, request timed out.'
+                    msg = 'Cannot connect to voice channel, request timed out. Try checking your channel/bot permissions.'
                     await client.send_message(message.channel, msg)
-                    break
-
-                # tell the party the timer has begun in the chat
-                msg = 'Verus Hilla timer has started in the {} channel.'.format(vc.channel)
-                await client.send_message(message.channel, msg)
-                
-                # (re-)initialize the phase/vc for that server
-                phases[vc.server.id] = 1
-                vcs[vc.server.id] = vc
-
-                # play the start.mp3 file, which says "hilla fight starting, good luck"
-                bot_speak(vc, 'start.mp3')
-                
-                # wait for 16s after entry to skip opening cutscene, as the announcement is being made
-                await asyncio.sleep(16)
-
-                if phases[vc.server.id] != 0:
-                    # if bot did not disconnect during sleep                    
-                    # tell the party the fight has started in chat
-                    # Bot may send this message multiple times if it is restarted before 16s sleep is over
-                    # Does not influence timer or voice chat, they're just ghost threads that will die
-                    # once !stop is calling again.
-                    msg = 'Fight has started. Starting first 150s timer.'
-                    msg += '\nIf you see this message multiple times, ignore it.'
-                    await client.send_message(message.channel, msg)
-
-                    await timer(vc, 150, 1634) # start timer 150s at 29:44 in boss
             else:
                 # if sender is not in VC, don't join and ask the sender to please join
                 msg = 'Please join a voice channel first and re-use the command for bot to join.'
