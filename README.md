@@ -122,8 +122,6 @@ https://discordapp.com/api/oauth2/authorize?client_id=CID&permissions=36707584&s
 
 **You should see a message [like this](http://prntscr.com/n4yrzt)**
 
-NOTE: From what I understand, the bot needs to be properly approved via the OAuth2 link BEFORE running on the server. I am not sure about this. 
-
 # Known Bugs
 Multiple initial starting messages may appear if !start is used after !stop in under 16 seconds. This is due to `asyncio.sleep(16)` in `!start`. This is not a critical bug and does not affect the performance of the timer. 
 
