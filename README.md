@@ -44,7 +44,9 @@ This bot may not always be 100% accurate to the real fight due to unresolvable l
 You must either deploy **locally** or on a **paid cloud server** (e.g. AWS, DigitalOcean).
 
 ## For Local Windows Use
-You must install Ubuntu 18.04 via the Windows Store. Once installed, run, and you will be asked to enter a new UNIX username and password. Make sure to type accurately and carefully. You will not be able to see your password when typing it.
+You must install [Ubuntu 18.04 via the Windows Store](https://www.microsoft.com/en-us/p/ubuntu-1804-lts/9n9tngvndl3q?activetab=pivot:overviewtab). 
+
+Once installed, run, and you will be asked to enter a new UNIX username and password. Make sure to type accurately and carefully. You will not be able to see your password when typing it.
 
 Continue onto the following section once you are done.
 
