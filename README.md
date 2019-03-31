@@ -48,6 +48,7 @@ Continue onto the following section once you are done.
 
 ### Deployment for Ubuntu 18.04 and Backend Servers (e.g. AWS, DigitalOcean)
 **Strongly suggested to use Python 3.6.7.**
+
 Currently, the only tested platform is **Ubuntu 18.04**. Other Linux distributions may work as well.
 
 To install, run the following commands. You will be asked for your password many times:
