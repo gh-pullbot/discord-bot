@@ -1,6 +1,8 @@
+[![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
+
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
+[![Requirements Status](https://requires.io/github/CodeSammich/discord-bot/requirements.svg?branch=master)](https://requires.io/github/CodeSammich/discord-bot/requirements/?branch=master)
 [![HitCount](http://hits.dwyl.io/codesammich/discord-bot.svg)](http://hits.dwyl.io/codesammich/discord-bot)
-[![Known Vulnerabilities](https://snyk.io/test/github/codesammich/discord-bot/badge.svg)](https://snyk.io/test/github/codesammich/discord-bot)
 
 # discord-bot
 Discord Bot for Time Keeping in MapleStory
