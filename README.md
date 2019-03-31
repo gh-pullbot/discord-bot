@@ -120,6 +120,9 @@ Multiple initial starting messages may appear if !start is used after !stop in u
 ## Possible Future Features:
  - Allow input of current clock time for soul split
     - Helpful in the event of player error, especially during a phase change
+ - Replace espeak dependency with media clip splicing and merging
+    - Separate folder with 0-9 mp3 files and merge them together to artificially recreate the dynamic part we needed espeak for
+    - Can use Google TTS completely in that way, making the vocals consistent
     
 ## Resolved 3/30/19 19:41 EDT:
 **Concurrency Application and Scalability Limitations**
