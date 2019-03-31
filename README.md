@@ -1,6 +1,6 @@
-## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
-
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
 [![HitCount](http://hits.dwyl.io/codesammich/discord-bot.svg)](http://hits.dwyl.io/codesammich/discord-bot)
+[![Known Vulnerabilities](https://snyk.io/test/github/codesammich/discord-bot/badge.svg)](https://snyk.io/test/github/codesammich/discord-bot)
 
 # discord-bot
 Discord Bot for Time Keeping in MapleStory
