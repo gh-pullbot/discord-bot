@@ -41,12 +41,12 @@ This bot may not always be 100% accurate to the real fight due to unresolvable l
 
 You must either deploy **locally** or on a **paid cloud server** (e.g. AWS, DigitalOcean).
 
-### For Local Windows Use
+## For Local Windows Use
 You must install Ubuntu 18.04 via the Windows Store. Once installed, run, and you will be asked to enter a new UNIX username and password. Make sure to type accurately and carefully. You will not be able to see your password when typing it.
 
 Continue onto the following section once you are done.
 
-### Deployment for Ubuntu 18.04 and Backend Servers (e.g. AWS, DigitalOcean)
+## Deployment for Ubuntu 18.04 and Backend Servers (e.g. AWS, DigitalOcean)
 **Strongly suggested to use Python 3.6.7.**
 
 Currently, the only tested platform is **Ubuntu 18.04**. Other Linux distributions may work as well.
