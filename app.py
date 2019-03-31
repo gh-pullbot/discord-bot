@@ -62,7 +62,6 @@ async def on_ready():
 
 async def timer(vc, interval, boss_time):
     global phases
-    print(phases)
     while True:
         # boss_time first starts at 1784 seconds, or 29:44
         log('Timer has started at boss time: {} in the {} channel in {} server.'\
@@ -162,7 +161,6 @@ async def on_message(message):
             # if the bot is not in a voice channel yet
             if call != None:
                 # if sender is in a voice channel, join the vc
-                print(call)
                 try:
                     vc = await client.join_voice_channel(call)
 
