@@ -37,13 +37,13 @@ This bot may not always be 100% accurate to the real fight due to unresolvable l
 # Usage
 **Commands include:**
 
-`!start` to start timer and allow bot to enter user's voice channel
+`!start` or `!join` or `!fight` to start timer and allow bot to enter user's voice channel
 
 `!2` for phase 2 (use after 1.75 HP bars have depleted)
 
 `!3` for phase 3 (use after 2.75 HP bars have depleted)
 
-`!stop` to disconnect the bot.
+`!stop` or `!leave` to disconnect the bot.
 
 `!help` to see this description.
 
