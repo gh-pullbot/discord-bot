@@ -5,13 +5,13 @@
 [![HitCount](http://hits.dwyl.io/codesammich/discord-bot.svg)](http://hits.dwyl.io/codesammich/discord-bot)
 
 # Table of Contents
-  * [Introduction](#introduction)
+  * [Introduction](#discord-bot)
   * [Installation](#installation)
-    * [Local Windows Use](#windows)
-    * [Ubuntu 18.04](#ubuntu)
+    * [Local Windows Use](#local-windows)
+    * [Ubuntu 18.04](#ubuntu-18.04)
   * [Usage](#usage)
-  * [Known Bugs](#bugs)
-  * [Backlog](#log)
+  * [Known Bugs](#known-bugs)
+  * [Backlog](#backlog)
 
 # discord-bot
 Discord Bot for Time Keeping in MapleStory
@@ -52,7 +52,7 @@ This bot may not always be 100% accurate to the real fight due to unresolvable l
 
 You must either deploy **locally** or on a **paid cloud server** (e.g. AWS, DigitalOcean).
 
-## Local Windows Use
+## Local Windows
 You must install [Ubuntu 18.04 via the Windows Store](https://www.microsoft.com/en-us/p/ubuntu-1804-lts/9n9tngvndl3q?activetab=pivot:overviewtab). 
 
 Once installed, run, and you will be asked to enter a new UNIX username and password. Make sure to type accurately and carefully. You will not be able to see your password when typing it.
