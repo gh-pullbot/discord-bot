@@ -11,10 +11,10 @@ Special Thanks to
 - **catboy#7193** for cracking the concurrency and scalability problems
 
 Boss Timer Mechanics:
-     16s from start to hourglass timer (29:44)
-     First interval 150s (27:14, etc.)
-     When HP hits 25% on the second HP bar, interval becomes 125s  (requires !2 input from the player)
-     When HP hits 20% on the third HP bar, interval becomes 100s   (requires !3 input from the player)
+- 16s from start to hourglass timer (29:44)
+- First interval 150s (27:14, etc.)
+- When HP hits 25% on the second HP bar, interval becomes 125s  (requires !2 input from the player)
+- When HP hits 20% on the third HP bar, interval becomes 100s   (requires !3 input from the player)
 
 **NOTE:**
 This bot may not always be 100% accurate to the real fight due to unresolvable latency issues with both the Nexon and Discord servers. There may be a variance of 0-5s from actual game.
