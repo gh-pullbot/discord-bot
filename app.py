@@ -28,25 +28,23 @@ import os
 client = discord.Client()
 
 # then try finding the secret_key.txt file for the key (for local deployments)
-token_file = open('secret_key.txt', 'r')
-TOKEN = token_file.read() # make a file called secret_key.txt and replace with key
-TOKEN = TOKEN.rstrip()
+with open('secret_key.txt', 'r') as token_file:
+    TOKEN = token_file.read()
+    TOKEN = TOKEN.rstrip()
 
 # open and load OPUS library for voice chat support and transcoding
-opuslib = find_library('opus') # Linux-based function
+opuslib = find_library('opus')  # Linux-based function
 discord.opus.load_opus(opuslib)
-
-# free TTS engine for Python e-Speak (on Linux) for "soul split at xx:xx"
-engine = pyttsx3.init()
-engine.setProperty('rate', 100)
-engine.setProperty('volume', 1)
 
 # Concurrent Server Data Structures
 # global dicts w/ information for each bot instance in each server/guild (Discord's term for server)
 # keys are: vc.server.id (unique per server)
-ffmpeg_players = {} # audio currently playing, prevents overlapping audio (see bot_speak)
-phases = {} # boss timer phases (150s, 125s, 100s)
-vcs = {} # voice channels the bot is currently in, derived from client.voice_clients (see find_bot_voice_client)
+# audio currently playing, prevents overlapping audio (see bot_speak)
+ffmpeg_players = {}
+phases = {}  # boss timer phases (150s, 125s, 100s)
+# voice channels the bot is currently in, derived from client.voice_clients (see find_bot_voice_client)
+vcs = {}
+
 
 @client.event
 async def on_ready():
@@ -60,71 +58,69 @@ async def on_ready():
     log(client.user.id)
     log('------')
 
+
 async def timer(vc, interval, boss_time):
     global phases
     while True:
         # boss_time first starts at 1784 seconds, or 29:44
-        log('Timer has started at boss time: {} in the {} channel in {} server.'\
+        log('Timer has started at boss time: {} in the {} channel in {} server.'
             .format(short_minutes_and_seconds(boss_time + interval), vc.channel, vc.server))
-        
+
         # text to speech
         # 60s warning
-        log('Starting {}s timer on the {} channel in {} server.'\
+        log('Starting {}s timer on the {} channel in {} server.'
             .format(interval, vc.channel, vc.server))
         await asyncio.sleep(interval - 60)
         if phases[vc.server.id] == 0:
             # if bot disconnected while sleeping, stop the thread
             break
-        
-        bot_speak(vc, 'a60seconds.mp3')
-        
+
+        bot_speak(vc, 'audio/a60seconds.ogg')
+
         # 30s warning
         await asyncio.sleep(30)
         if phases[vc.server.id] == 0:
             # if bot disconnected while sleeping, stop the thread
             break
 
-        bot_speak(vc, 'a30seconds.mp3')
-        
+        bot_speak(vc, 'audio/a30seconds.ogg')
+
         # 15s warning
         await asyncio.sleep(15)
         if phases[vc.server.id] == 0:
             # if bot disconnected while sleeping, stop the thread
             break
 
-        bot_speak(vc, 'a15seconds.mp3')
-        
+        bot_speak(vc, 'audio/a15seconds.ogg')
+
         # 5s warning
         await asyncio.sleep(10)
         if phases[vc.server.id] == 0:
             # if bot disconnected while sleeping, stop the thread
             break
 
-        bot_speak(vc, 'a5seconds.mp3')
-        
+        bot_speak(vc, 'audio/a5seconds.ogg')
+
         # 0s soul split announcement
         await asyncio.sleep(5)
         if phases[vc.server.id] == 0:
             # if bot disconnected while sleeping, stop the thread
             break
-        
+
         # update internal representation of boss clock
         mins_and_secs = minutes_and_seconds(boss_time)
-        
-        # generate wav file to say "soul split at xx:xx"
-        # unfortunately, this uses a really creepy low voice, but I really can't find
-        # anything better for free. Google TTS is amazing, but requires real $$$
-        soul_split_at_xx_xx = '\"soul. split. at. ' + mins_and_secs + '"'
-        generate_speech_wav(vc, soul_split_at_xx_xx)
-        bot_speak(vc, '{}soulsplit.wav'.format(vc.server.id)) # play the correct vc/server's file
-        
+
+        # generate an ogg vorbis file generate wav file to say "soul split at xx:xx"
+        generate_next_split_audio(vc, mins_and_secs.split(' '))
+        bot_speak(vc, "./tmp/output_{}.ogg".format(vc.server.id))
+
         # if phase changed, start timer again with less time
         if phases[vc.server.id] == 1:
             await timer(vc, 150, boss_time - 150)
             break
         if phases[vc.server.id] == 2:
             await timer(vc, 125, boss_time - 125)
-            break # so previous thread of timer stops and returns
+            break  # so previous thread of timer stops and returns
         elif phases[vc.server.id] == 3:
             await timer(vc, 100, boss_time - 100)
             break
@@ -133,14 +129,14 @@ async def timer(vc, interval, boss_time):
 @client.event
 async def on_message(message):
     # so the dicts can always be accessed, even by async calls
-    global phases 
+    global phases
     global vcs
-    
+
     # message sender's parameters
-    author = message.author # or sender
+    author = message.author  # or sender
     channel = message.channel
     server = message.server
-    call = author.voice.voice_channel # author's current voice channel
+    call = author.voice.voice_channel  # author's current voice channel
 
     # we do not want the bot to reply to itself
     if message.author == client.user:
@@ -154,7 +150,7 @@ async def on_message(message):
         msg += '\n     !3 for phase 3 (use after 2.75 HP bars have depleted)'
         msg += '\n     !stop to disconnect the bot.'
         await client.send_message(message.channel, msg)
-        
+
     if message.content.startswith('!start') or message.content.startswith('!join') or message.content.startswith('!fight'):
         # Joins the voice chat of the person who used the command
         if not client.is_voice_connected(server):
@@ -165,21 +161,22 @@ async def on_message(message):
                     vc = await client.join_voice_channel(call)
 
                     # tell the party the timer has begun in the chat
-                    msg = 'Verus Hilla timer has started in the {} channel.'.format(vc.channel)
+                    msg = 'Verus Hilla timer has started in the {} channel.'.format(
+                        vc.channel)
                     await client.send_message(message.channel, msg)
-                
+
                     # (re-)initialize the phase/vc for that server
                     phases[vc.server.id] = 1
                     vcs[vc.server.id] = vc
 
-                    # play the start.mp3 file, which says "hilla fight starting, good luck"
-                    bot_speak(vc, 'start.mp3')
-                
+                    # play the start.ogg file, which says "hilla fight starting, good luck"
+                    bot_speak(vc, 'audio/start.ogg')
+
                     # wait for 16s after entry to skip opening cutscene, as the announcement is being made
                     await asyncio.sleep(16)
 
                     if phases[vc.server.id] != 0:
-                        # if bot did not disconnect during sleep                    
+                        # if bot did not disconnect during sleep
                         # tell the party the fight has started in chat
                         # Bot may send this message multiple times if it is restarted before 16s sleep is over
                         # Does not influence timer or voice chat, they're just ghost threads that will die
@@ -188,7 +185,7 @@ async def on_message(message):
                         msg += '\nIf you see this message multiple times, ignore it.'
                         await client.send_message(message.channel, msg)
 
-                        await timer(vc, 150, 1634) # start timer 150s at 29:4
+                        await timer(vc, 150, 1634)  # start timer 150s at 29:4
                 except asyncio.TimeoutError:
                     msg = 'Cannot connect to voice channel, request timed out. Try checking your channel/bot permissions.'
                     await client.send_message(message.channel, msg)
@@ -200,7 +197,8 @@ async def on_message(message):
             msg = 'Verus Hilla Bot is already in a voice channel.'
             await client.send_message(message.channel, msg)
 
-        log('!start called by {} on {} server has finished executing'.format(author, server))
+        log('!start called by {} on {} server has finished executing'.format(
+            author, server))
 
     # this should only be used at 2.2 bars left
     if message.content.startswith('!2'):
@@ -210,8 +208,10 @@ async def on_message(message):
 
             if author.server_permissions.administrator or author_in_vc(author, vc):
                 # if the author is an admin or is in the vc with the bot
-                phases[vc.server.id] = 2               # set the phase for sender's server
-                bot_speak(vc, '125.mp3')               # say interval is now 125s
+                # set the phase for sender's server
+                phases[vc.server.id] = 2
+                # say interval is now 125s
+                bot_speak(vc, 'audio/hourglass_updated_125.ogg')
                 msg = 'Split interval now 125 seconds. Will start after next soul split.'
             else:
                 msg = 'You are not in the voice chat or an administrator.'
@@ -225,12 +225,14 @@ async def on_message(message):
     # this should only be used at 1.2 bars left
     if message.content.startswith('!3'):
         if client.is_voice_connected(server):     # if bot is in a vc
-            vc = find_bot_voice_client(server.id) # find the vc
+            vc = find_bot_voice_client(server.id)  # find the vc
 
             if author.server_permissions.administrator or author_in_vc(author, vc):
                 # if the author is an admin or is in the vc with the bot
-                phases[vc.server.id] = 3              # set the phase for sender's server
-                bot_speak(vc, '100.mp3')              # say interval is now 100s
+                # set the phase for sender's server
+                phases[vc.server.id] = 3
+                # say interval is now 100s
+                bot_speak(vc, 'audio/hourglass_updated_100.ogg')
                 msg = 'Split interval now 100 seconds. Will start after next soul split.'
             else:
                 msg = 'You are not in the voice chat or an administrator.'
@@ -246,14 +248,15 @@ async def on_message(message):
     if message.content.startswith('!stop') or message.content.startswith('!leave'):
         # find the voice chat corresponding to the message and disconnect
         if client.is_voice_connected(server):     # if bot is in a vc
-            vc = find_bot_voice_client(server.id) # find the vc
+            vc = find_bot_voice_client(server.id)  # find the vc
 
 #            if author.server_permissions.administrator or author_in_vc(author, vc):
             if author_in_vc(author, vc):
                 # if the author is an admin or is in the vc with the bot
                 await vc.disconnect()                 # disconnect from voice channel
                 phases[vc.server.id] = 0
-                del vcs[vc.server.id]                 # delete the voice channel from dict
+                # delete the voice channel from dict
+                del vcs[vc.server.id]
                 msg = 'Disconnected from {}.'.format(vc.channel)
             else:
                 msg = 'You are not in the voice chat or an administrator.'
@@ -264,6 +267,7 @@ async def on_message(message):
         await client.send_message(message.channel, msg)
         log('!stop called by {} on {} server has finished.'.format(author, server))
 
+
 def author_in_vc(author, vc):
     '''
     Is the author in the vc?
@@ -272,35 +276,37 @@ def author_in_vc(author, vc):
     Returns: True/False
     '''
     for member in vc.server.members:
-#        log('{} is in the {} server. The bot is in the {} server.'.format(member, member.server, vc.channel))
+        #        log('{} is in the {} server. The bot is in the {} server.'.format(member, member.server, vc.channel))
         try:
             # need to compare ids and not just channel names because names are not unique
             # (e.g. two channels can have the same name)
             if member.voice.voice_channel.id == vc.channel.id:
                 return True
-        except AttributeError: # NoneType object has no attribute 'id'
-            # this will happen if someone outside of the vc tries to use the command 
+        except AttributeError:  # NoneType object has no attribute 'id'
+            # this will happen if someone outside of the vc tries to use the command
             continue
-            
+
     return False
-        
+
+
 def find_bot_voice_client(server_id):
     '''
     Updates the voice chats (vcs) list with current voice connections
     and returns the voice chat in the server with server_id.
-    
+
     Inputs: Unique id of Discord server/guild (vc.server.id or message.server.id)
     Returns: the voice chat object corresponding to the bot's server
     '''
-    global vcs # so the dict can always be accessed, even by async calls
+    global vcs  # so the dict can always be accessed, even by async calls
     # update vcs dict with current vc connections iterable
     for vc in client.voice_clients:
         # add vc to vcs dict if not already there
         if vc.server.id not in vcs.keys():
             vcs[vc.server.id] = vc
-            
+
     return vcs[server_id]
-    
+
+
 def minutes_and_seconds(seconds):
     '''
     Converts seconds to minutes and seconds (xx minutes xx seconds)
@@ -312,6 +318,7 @@ def minutes_and_seconds(seconds):
     secs = seconds % 60
     mins_and_secs = str(mins) + " minutes " + str(secs) + " seconds"
     return mins_and_secs
+
 
 def short_minutes_and_seconds(seconds):
     '''
@@ -327,19 +334,7 @@ def short_minutes_and_seconds(seconds):
     mins_and_secs = str(mins) + ":" + str(secs)
     return mins_and_secs
 
-def generate_speech_wav(vc, text):
-    '''
-    Given a text string, generate a WAV file of a voice speaking the text.
 
-    Input: String text
-    Output: WAV file in the current directory with server.id as name
-    '''
-    # vc.server.id + soulsplit.wav file name to allow concurrent servers to speak
-    espeak_command = 'espeak -m {} -v mb-en1 --stdout > {}soulsplit.wav'.format(text, vc.server.id)
-    log(espeak_command)
-    os.system(espeak_command) # generates soulsplit.wav
-    log("TTS generation of {}soulsplit.wav is successful".format(vc.server.id))
-    
 def log(line):
     '''
     Logs date and time to the console along with input.
@@ -350,17 +345,34 @@ def log(line):
     date_str = datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S')
     print('[{}] {}'.format(date_str, line))
 
-def bot_speak(vc, mp3_name):
+
+def generate_next_split_audio(vc, time_list):
+    '''
+    Generate an ogg vorbis audio file containing concatenated text.
+    '''
+    the_rest_of_the_files = "|".join(
+        ['audio/' + filename + '.ogg' for filename in time_list])
+    # The concat takes the format 'concat:file1.ogg|file2.ogg|file3.ogg'
+    # If file1.ogg contains 'Soul split at'
+    # and file2.ogg contains '2'
+    # and file3.ogg contains 'minutes'
+    # .. you get the drill
+    CONCAT_CMD = 'ffmpeg -y  -use_wallclock_as_timestamps 1 -i "concat:audio/soul_split_at.ogg|{}" -c copy ./tmp/output_{}.ogg'.format(
+        the_rest_of_the_files, vc.server.id)
+    os.system(CONCAT_CMD)
+
+
+def bot_speak(vc, filename):
     '''
     Allows the bot to play audio, or speak, into the voice channel.
 
     Retains a mappiung of voice sessions to players.
     If a session has a voice line in progress, terminate it before playing the next one.
 
-    Input: String mp3_name
+    Input: String filename
     Output: MP3 file played by bot in the corresponding voice channel
     '''
-    global ffmpeg_players # so the dict can always be accessed, even by async calls
+    global ffmpeg_players  # so the dict can always be accessed, even by async calls
 
     if not vc.is_connected:
         return
@@ -372,10 +384,11 @@ def bot_speak(vc, mp3_name):
         ffmpeg_players.pop(vc.server.id, None)
 
     # start a new audio player for the new audio and save in the global ffmpeg_players dict for concurrency
-    log('playing {} in {}'.format(mp3_name, vc.server))
-    ffmpeg_players[vc.server.id] = vc.create_ffmpeg_player(mp3_name,
-        after=lambda: log('speech is done in the {} channel of {}.'.format(vc.channel, vc.server)))
+    log('playing {} in {}'.format(filename, vc.server))
+    ffmpeg_players[vc.server.id] = vc.create_ffmpeg_player(filename,
+                                                           after=lambda: log('speech is done in the {} channel of {}.'.format(vc.channel, vc.server)))
     ffmpeg_players[vc.server.id].start()
+
 
 # run the client and connect to Discord's servers
 # this needs to run before servers/guilds can connect successfully
