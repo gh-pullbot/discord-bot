@@ -116,7 +116,7 @@ NOTE: From what I understand, the bot needs to be properly approved via the OAut
 # Known Bugs
 Multiple initial starting messages may appear if !start is used after !stop in under 16 seconds. This is due to `asyncio.sleep(16)` in `!start`. This is not a critical bug and does not affect the performance of the timer. 
 
-# Issues Log
+# Backlog
 ## Possible Future Features:
  - Allow input of current clock time for soul split
     - Helpful in the event of player error, especially during a phase change
