@@ -110,7 +110,7 @@ Possible Future Features:
  - Allow input of current clock time for soul split
     - Helpful in the event of player error, especially during a phase change
     
-#####Resolved 3/30/19:
+##### Resolved 3/30/19:
 **Concurrency Application and Scalability Limitations**
 Find ways to lessen the number of "Applications" under Discord Dev Portal and use fewer number of keys. Current implementation is one application/key per server, and the OAuth2 permission toggling is unclear.
 
@@ -118,7 +118,7 @@ Possible research directions on how to further scale bot: Pink Bean, NightBot, M
 
 https://discordapp.com/developers/docs/topics/oauth2#bots
 
-####Resolved 3/30/19:
+#### Resolved 3/30/19:
 **LibOpus Crash**
 Using a command, which triggers another OPUS MP3 playback, when bot is already speaking will crash the bot
 
