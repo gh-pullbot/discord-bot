@@ -11,12 +11,12 @@ This bot's timer is tuned for the Verus/True Hilla boss fight.
 
 It can be deployed on up to as many servers per host as Discord allows per Application in the [Discord Developer Portal](https://discordapp.com/developers/applications/).
 
-Special Thanks to
+**Special Thanks:**
 - **[ThiefGMS](https://www.youtube.com/channel/UCzCehIR4x1NHz67pOLsODmw)** for his mp3 files and insight into the Verus Hilla fight, as well as the inspiration for this project!
 - **[MapleStory.gg](https://maplestory.gg/)** for being the first to test and work with me
 - **catboy#7193** for cracking the concurrency and scalability problems
 
-Boss Timer Mechanics:
+**Boss Timer Mechanics:**
 - 16s from start to hourglass timer (29:44)
 - First interval 150s (27:14, etc.)
 - When HP hits 25% on the second HP bar, interval becomes 125s  (requires !2 input from the player)
