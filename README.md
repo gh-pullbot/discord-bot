@@ -37,7 +37,9 @@ This bot may not always be 100% accurate to the real fight due to unresolvable l
 `!stop` to disconnect the bot.
 
 # Installation / Deployment
-NOTE: [Unfortunately, Discord Voice Chat does not work with free web servers like Heroku](https://stackoverflow.com/questions/53074580/discord-py-opus-heroku-issues)
+[Unfortunately, Discord Voice Chat does not work with free web servers like Heroku](https://stackoverflow.com/questions/53074580/discord-py-opus-heroku-issues) 
+
+You must either deploy **locally** or on a **paid cloud server** (e.g. AWS, DigitalOcean).
 
 ### For Local Windows Use
 You must install Ubuntu 18.04 via the Windows Store. Once installed, run, and you will be asked to enter a new UNIX username and password. Make sure to type accurately and carefully. You will not be able to see your password when typing it.
