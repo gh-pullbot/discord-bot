@@ -116,7 +116,7 @@ To install, run the following commands. You will be asked for your password many
 
 https://discordapp.com/api/oauth2/authorize?client_id=CID&permissions=36707584&scope=bot
 
-**8) Finally, to run the bot:**
+**8) Finally, run the bot:**
 
 > python3 app.py
 
