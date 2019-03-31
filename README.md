@@ -114,7 +114,7 @@ To install, run the following commands. You will be asked for your password many
 
 **7) Before running the bot, please make sure to follow this link and approve the bot's entry to your Discord server. Replace CID with your [client id located here](http://prntscr.com/n4z8ts)**
 
-https://discordapp.com/api/oauth2/authorize?client_id=CID&permissions=36707584&scope=bot
+https://discordapp.com/api/oauth2/authorize?client_id=CID&permissions=37084480&scope=bot
 
 **8) Finally, run the bot:**
 
