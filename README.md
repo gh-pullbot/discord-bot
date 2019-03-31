@@ -8,8 +8,8 @@
   * [Introduction](#discord-bot)
   * [Usage](#usage)
   * [Installation](#installation)
-    * [Local Windows Use](#local-windows)
-    * [Ubuntu 18.04](#ubuntu-18.04)
+    * [Local Windows](#local-windows)
+    * [Ubuntu 18.04](#ubuntu-1804)
   * [Known Bugs](#known-bugs)
   * [Backlog](#backlog)
 
