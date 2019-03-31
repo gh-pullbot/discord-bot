@@ -4,6 +4,15 @@
 [![Requirements Status](https://requires.io/github/CodeSammich/discord-bot/requirements.svg?branch=master)](https://requires.io/github/CodeSammich/discord-bot/requirements/?branch=master)
 [![HitCount](http://hits.dwyl.io/codesammich/discord-bot.svg)](http://hits.dwyl.io/codesammich/discord-bot)
 
+# Table of Contents
+  * [Introduction](#discord-bot)
+  * [Usage](#usage)
+  * [Installation](#installation)
+    * [Local Windows](#local-windows)
+    * [Ubuntu 18.04](#ubuntu-1804)
+  * [Known Bugs](#known-bugs)
+  * [Backlog](#backlog)
+
 # discord-bot
 Discord Bot for Time Keeping in MapleStory
 
@@ -38,19 +47,21 @@ This bot may not always be 100% accurate to the real fight due to unresolvable l
 
 `!help` to see this description.
 
-# Installation / Deployment
+# Installation
 [Unfortunately, Discord Voice Chat does not work with free web servers like Heroku](https://stackoverflow.com/questions/53074580/discord-py-opus-heroku-issues) 
 
 You must either deploy **locally** or on a **paid cloud server** (e.g. AWS, DigitalOcean).
 
-## For Local Windows Use
+## Local Windows
+Primarily for players who want to host the bot for personal use during gameplay. This method is not recommended for long-term hosting.
+
 You must install [Ubuntu 18.04 via the Windows Store](https://www.microsoft.com/en-us/p/ubuntu-1804-lts/9n9tngvndl3q?activetab=pivot:overviewtab). 
 
 Once installed, run, and you will be asked to enter a new UNIX username and password. Make sure to type accurately and carefully. You will not be able to see your password when typing it.
 
 Continue onto the following section once you are done.
 
-## Deployment for Ubuntu 18.04
+## Ubuntu 18.04
 **Strongly suggested to use Python 3.6.7.**
 
 Currently, the only tested platform is **Ubuntu 18.04**. Other Linux distributions may work as well.
@@ -103,15 +114,13 @@ To install, run the following commands. You will be asked for your password many
 
 **7) Before running the bot, please make sure to follow this link and approve the bot's entry to your Discord server. Replace CID with your [client id located here](http://prntscr.com/n4z8ts)**
 
-https://discordapp.com/api/oauth2/authorize?client_id=CID&permissions=36707584&scope=bot
+https://discordapp.com/api/oauth2/authorize?client_id=CID&permissions=37084480&scope=bot
 
-**8) Finally, to run the bot:**
+**8) Finally, run the bot:**
 
 > python3 app.py
 
 **You should see a message [like this](http://prntscr.com/n4yrzt)**
-
-NOTE: From what I understand, the bot needs to be properly approved via the OAuth2 link BEFORE running on the server. I am not sure about this. 
 
 # Known Bugs
 Multiple initial starting messages may appear if !start is used after !stop in under 16 seconds. This is due to `asyncio.sleep(16)` in `!start`. This is not a critical bug and does not affect the performance of the timer. 
@@ -120,6 +129,9 @@ Multiple initial starting messages may appear if !start is used after !stop in u
 ## Possible Future Features:
  - Allow input of current clock time for soul split
     - Helpful in the event of player error, especially during a phase change
+ - Replace espeak dependency with media clip splicing and merging
+    - Separate folder with 0-9 mp3 files and merge them together to artificially recreate the dynamic part we needed espeak for
+    - Can use Google TTS completely in that way, making the vocals consistent
     
 ## Resolved 3/30/19 19:41 EDT:
 **Concurrency Application and Scalability Limitations**
