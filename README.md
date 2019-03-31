@@ -6,10 +6,10 @@
 
 # Table of Contents
   * [Introduction](#discord-bot)
+  * [Usage](#usage)
   * [Installation](#installation)
     * [Local Windows Use](#local-windows)
     * [Ubuntu 18.04](#ubuntu-18.04)
-  * [Usage](#usage)
   * [Known Bugs](#known-bugs)
   * [Backlog](#backlog)
 
@@ -47,7 +47,7 @@ This bot may not always be 100% accurate to the real fight due to unresolvable l
 
 `!help` to see this description.
 
-# Installation / Deployment
+# Installation
 [Unfortunately, Discord Voice Chat does not work with free web servers like Heroku](https://stackoverflow.com/questions/53074580/discord-py-opus-heroku-issues) 
 
 You must either deploy **locally** or on a **paid cloud server** (e.g. AWS, DigitalOcean).
