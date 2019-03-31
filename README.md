@@ -123,6 +123,7 @@ Multiple initial starting messages may appear if !start is used after !stop in u
     
 ## Resolved 3/30/19 19:41 EDT:
 **Concurrency Application and Scalability Limitations**
+
 Find ways to lessen the number of "Applications" under Discord Dev Portal and use fewer number of keys. Current implementation is one application/key per server, and the OAuth2 permission toggling is unclear.
 
 Possible research directions on how to further scale bot: Pink Bean, NightBot, MEE6, Carl-bot
@@ -131,6 +132,7 @@ https://discordapp.com/developers/docs/topics/oauth2#bots
 
 ## Resolved 3/30/19 14:31 EDT: 
 **LibOpus Crash**
+
 Using a command, which triggers another OPUS MP3 playback, when bot is already speaking will crash the bot
 
 This is due to libopus, most likely happening in bot_speak() with the ffmpeg player.
