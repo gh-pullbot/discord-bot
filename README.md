@@ -26,17 +26,15 @@ Boss Timer Mechanics:
 This bot may not always be 100% accurate to the real fight due to unresolvable latency issues with both the Nexon and Discord servers. There may be a variance of 0-5s from actual game.
 
 # Usage
-NOTE: Please do not use a command while the bot is speaking. It will crash due to OPUS limitations with Discord.
+**Commands include:**
 
-Commands include:
+`!start` to start timer and allow bot to enter user's voice channel
 
-!start to start timer and allow bot to enter user's voice channel
+`!2` for phase 2 (use after 1.75 HP bars have depleted)
 
-!2 for phase 2 (use after 1.75 HP bars have depleted)
+`!3` for phase 3 (use after 2.75 HP bars have depleted)
 
-!3 for phase 3 (use after 2.75 HP bars have depleted)
-
-!stop to disconnect the bot.
+`!stop` to disconnect the bot.
 
 # Installation / Deployment
 NOTE: [Unfortunately, Discord Voice Chat does not work with free web servers like Heroku](https://stackoverflow.com/questions/53074580/discord-py-opus-heroku-issues)
