@@ -149,7 +149,7 @@ async def on_message(message):
 
     if message.content.startswith('!help'):
         # !help command, including usage tips
-        msg += '\nCommands include:'
+        msg = '\nCommands include:'
         msg += '\n     !start makes bot join voice chat (use upon entering)'
         msg += '\n     !2 for phase 2 (use after 1.75 HP bars have depleted)'
         msg += '\n     !3 for phase 3 (use after 2.75 HP bars have depleted)'
