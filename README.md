@@ -116,12 +116,12 @@ NOTE: From what I understand, the bot needs to be properly approved via the OAut
 # Known Bugs
 Multiple initial starting messages may appear if !start is used after !stop in under 16 seconds. This is due to `asyncio.sleep(16)` in `!start`. This is not a critical bug and does not affect the performance of the timer. 
 
-# To Do
+# Issues Log
 ## Possible Future Features:
  - Allow input of current clock time for soul split
     - Helpful in the event of player error, especially during a phase change
     
-## Resolved 3/30/19:
+## Resolved 3/30/19 19:41 EDT:
 **Concurrency Application and Scalability Limitations**
 Find ways to lessen the number of "Applications" under Discord Dev Portal and use fewer number of keys. Current implementation is one application/key per server, and the OAuth2 permission toggling is unclear.
 
@@ -129,7 +129,7 @@ Possible research directions on how to further scale bot: Pink Bean, NightBot, M
 
 https://discordapp.com/developers/docs/topics/oauth2#bots
 
-## Resolved 3/30/19:
+## Resolved 3/30/19 14:31 EDT: 
 **LibOpus Crash**
 Using a command, which triggers another OPUS MP3 playback, when bot is already speaking will crash the bot
 
